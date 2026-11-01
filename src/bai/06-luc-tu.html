@@ -1,0 +1,159 @@
+<!-- title: Lực từ lên dòng điện · Vật lí 12 -->
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Từ trường · Cảm ứng từ · Lực từ tác dụng lên đoạn dây dẫn</div>
+      <h1>Dây dẫn trong nam châm</h1>
+      <p class="lede">Cho dòng điện chạy qua đoạn dây nằm giữa hai cực nam châm chữ U. Dây bị đẩy sang một bên. Lực mạnh hay yếu, sang trái hay phải, tuỳ vào bốn thứ bạn điều khiển được.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" style="color:var(--violet)">B · cảm ứng từ</span><span class="pill" style="color:var(--accent)">I · dòng điện</span><span class="pill" style="color:var(--hot)">F · lực từ</span></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="sB">Cảm ứng từ B <output id="oB"></output></label><input type="range" id="sB" min="0" max="0.5" step="0.01" value="0.2"></div>
+      <div class="ctl"><label for="sI">Cường độ dòng điện I <output id="oI"></output></label><input type="range" id="sI" min="-10" max="10" step="0.5" value="5"></div>
+      <div class="ctl"><label for="sL">Chiều dài dây trong từ trường L <output id="oL"></output></label><input type="range" id="sL" min="5" max="20" step="1" value="10"></div>
+      <div class="ctl"><label for="sA">Góc giữa dây và đường sức α <output id="oA"></output></label><input type="range" id="sA" min="0" max="90" step="1" value="90"></div>
+      <div class="readout two">
+        <div><small>Lực từ F</small><strong id="rF"></strong> <em>N</em></div>
+        <div><small>Chiều lực</small><strong id="rDir" style="font-size:.95rem"></strong></div>
+      </div>
+      <div class="formula">
+        <div class="eq"><i>F</i> = <i>B</i>·<i>I</i>·<i>L</i>·sin α</div>
+        <div class="eqline" id="eqF"></div>
+        <div class="law">Quy tắc bàn tay trái: đặt bàn tay trái sao cho đường sức từ đi vào lòng bàn tay, chiều từ cổ tay đến các ngón tay giữa là chiều dòng điện; ngón cái choãi ra 90° chỉ chiều lực từ.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Lực từ theo góc α</h3><p>Lực lớn nhất khi dây vuông góc với đường sức, bằng 0 khi dây song song với đường sức.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Dây đang bị đẩy theo chiều mũi tên F (màu cam). Nếu đổi chiều dòng điện (giữ nguyên nam châm), lực từ sẽ thế nào?</p>
+      <div class="choices" data-correct="flip">
+        <button class="choice" type="button" data-k="same">Không đổi</button>
+        <button class="choice" type="button" data-k="flip">Đổi chiều, độ lớn giữ nguyên</button>
+        <button class="choice" type="button" data-k="zero">Bằng 0</button>
+        <button class="choice" type="button" data-k="double">Mạnh gấp đôi</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Kéo thanh I sang giá trị âm và nhìn mũi tên F lật ngược. Đổi chiều nam châm cũng có tác dụng tương tự; đổi cả hai thì lực giữ nguyên chiều." data-wrong="Chưa đúng. Kéo thanh I sang giá trị âm và nhìn mũi tên F."></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Đổi chiều dòng điện.</li>
+        <li>Xoay dây về α = 0°: dây song song với đường sức, lực biến mất.</li>
+        <li>Tắt nam châm (B = 0): không có từ trường thì không có lực.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Đo lực từ lên đoạn dây trong nhiều trường hợp, người ta thấy F tỉ lệ với I, với L và với sin α. Tỉ số F/(I·L·sin α) chỉ phụ thuộc vào từ trường tại đó, nên được dùng để định nghĩa độ lớn cảm ứng từ.</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Cảm ứng từ</div><div class="eq"><i>B</i> = <i>F</i> / (<i>I</i>·<i>L</i>·sin α)</div><p>Đơn vị tesla (T): 1 T là cảm ứng từ gây lực 1 N lên đoạn dây dài 1 m có dòng 1 A, đặt vuông góc với đường sức.</p></div>
+        <div class="fact"><div class="eyebrow">Từ trường đều</div><div class="eq">đường sức song song, cách đều</div><p>Khoảng giữa hai cực nam châm chữ U gần như là từ trường đều. Đường sức đi ra từ cực Bắc (N) và đi vào cực Nam (S).</p></div>
+        <div class="fact"><div class="eyebrow">Ứng dụng</div><div class="eq">động cơ điện · loa</div><p>Trong động cơ, lực từ lên các cạnh khung dây tạo ra ngẫu lực làm rô-to quay. Trong loa, lực từ đẩy cuộn dây gắn với màng loa.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Đoạn dây dài 20 cm có dòng 5 A đặt vuông góc với đường sức của từ trường đều B = 0,4 T. Tính lực từ.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>F = BIL = 0,4 × 5 × 0,2 = 0,4 N</code>.</div></div>
+      <div class="flip"><p class="q">Cũng đoạn dây đó nhưng đặt hợp với đường sức một góc 30°. Lực từ bằng bao nhiêu?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>F = BIL·sin 30° = 0,4 × 0,5 = 0,2 N</code>.</div></div>
+      <div class="flip"><p class="q">Đoạn dây dài 10 cm, dòng 2 A vuông góc với đường sức, chịu lực 0,05 N. Tìm B.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>B = F/(IL) = 0,05 / (2 × 0,1) = 0,25 T</code>.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Thực hiện thí nghiệm (hoặc mô phỏng) để mô tả hướng của lực từ tác dụng lên đoạn dây dẫn mang dòng điện.</li>
+          <li>Định nghĩa được cảm ứng từ B và đơn vị tesla; vận dụng F = BIL·sin α.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Cho học sinh giơ bàn tay trái theo mô hình trên màn hình trước khi đổi chiều I, để kiểm tra quy tắc.</li>
+          <li>Giữ B, I, L, kéo α từ 0° đến 90°: học sinh tự vẽ đồ thị F theo α và nhận ra dạng sin.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Từ trường giữa hai cực được coi là đều và hướng thẳng từ cực N xuống cực S. Độ dịch của dây chỉ để minh hoạ, không theo tỉ lệ.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<!--CORE-->
+<script>
+(function(){
+const {$,fmt,V}=VL;
+VL.chrome('06');
+const S={B:0.2,I:5,L:10,a:90,off:0,phase:0};
+const st=VL.Ink3D($('stage'),{target:[0.2,0,0],dist:8.8,az:0.62,el:0.22});
+const graph=VL.Graph($('graph'));
+const tried=VL.Tried({neg:'đổi chiều dòng điện',par:'dây song song đường sức',off:'tắt từ trường'},$('tried'));
+['B','I','L','A'].forEach(k=>$('s'+k).addEventListener('input',()=>{const v=+$('s'+k).value;if(k==='A')S.a=v;else S[k]=v;
+  if(S.I<0)tried.add('neg');if(S.a===0&&S.B>0&&S.I!==0)tried.add('par');if(S.B===0)tried.add('off');}));
+const F=()=>S.B*Math.abs(S.I)*S.L/100*Math.sin(S.a*Math.PI/180);
+function draw(dt){const T=VL.tok;st.begin(dt);
+  const lw=S.L/5,ar=S.a*Math.PI/180;
+  const N=VL.mix(T.bad,T.card,0.1),Sc=VL.mix(T.cold,T.card,0.1),yoke=VL.mix(T['ink-2'],T.card,0.3);
+  // U magnet opening toward +x: arms along x, yoke on the left (-x)
+  st.box([-0.55,1.25,0],[2.3,0.5,lw],N,{stroke:T.ink,w:1});st.box([-0.55,-1.25,0],[2.3,0.5,lw],Sc,{stroke:T.ink,w:1});
+  st.box([-1.85,0,0],[0.3,3,lw],yoke,{stroke:T.ink,w:1});
+  const mono='700 15px '+getComputedStyle(document.body).getPropertyValue('--f-mono');
+  st.text([0.35,1.25,lw/2+0.02],'N',T.ink,{font:mono,front:true});st.text([0.35,-1.25,lw/2+0.02],'S',T.ink,{font:mono,front:true});
+  // field lines N -> S
+  if(S.B>0){const k=Math.max(1,Math.round(S.B/0.5*3));
+    for(let i=-1;i<=1;i++)for(let j=-k;j<=k;j++){const x=i*0.4,z=j/(k+0.5)*lw*0.45;
+      st.line([[x,0.98,z],[x,-0.98,z]],T.violet,1.2,{a:0.5});st.arrow([x,0.55,z],[x,0.32,z],T.violet,1.2,{head:0.12,a:0.75});}}
+  // wire in the y-z plane, angle a with the field (field along -y)
+  const d=[0,Math.cos(ar),Math.sin(ar)];const f=F(),sgn=Math.sign(S.I)*(S.B>0?1:0);
+  const target=sgn*Math.min(1,f/0.6)*0.45;S.off+=(target-S.off)*Math.min(1,dt*5);
+  const c=[S.off,0,0];
+  st.line([V.add(c,V.mul(d,-3)),V.add(c,V.mul(d,3))],T.ink,3.2);
+  const inF=Math.min(lw/2/Math.max(0.05,Math.abs(d[2])),0.98/Math.max(0.05,Math.abs(d[1])));
+  st.line([V.add(c,V.mul(d,-inF)),V.add(c,V.mul(d,inF))],T.accent,5);
+  S.phase+=dt*S.I*0.25;for(let k=0;k<12;k++){const t=((k/12+S.phase)%1+1)%1;st.sphere(V.add(c,V.mul(d,-2.9+5.8*t)),0.05,T.card,{a:0.95});}
+  if(S.I!==0){const off=[0,0.28,0];st.arrow(V.add(V.add(c,V.mul(d,Math.sign(S.I)*1.4)),off),V.add(V.add(c,V.mul(d,Math.sign(S.I)*2.6)),off),T.accent,2.2,{head:0.22});}
+  if(f>1e-4)st.arrow(c,V.add(c,[sgn*(0.4+1.6*Math.min(1,f/1)),0,0]),T.hot,3.5,{head:0.3,zb:-1});
+  st.arrow([1.5,0.75,-lw/2],[1.5,-0.75,-lw/2],T.violet,2.5,{head:0.22});st.text([1.75,0,-lw/2],'B',T.violet,{font:mono,align:'left'});
+  st.end();}
+function ui(){const f=F();
+  $('oB').textContent=fmt(S.B,2)+' T';$('oI').textContent=fmt(S.I,1)+' A';$('oL').textContent=S.L+' cm';$('oA').textContent=S.a+'°';
+  $('rF').textContent=fmt(f,3);
+  $('rDir').textContent=f<1e-6?'không có lực':(Math.sign(S.I)>0?'ra ngoài miệng chữ U':'vào trong lòng chữ U');
+  $('eqF').innerHTML=`= ${fmt(S.B,2)} × ${fmt(Math.abs(S.I),1)} × ${fmt(S.L/100,2)} × sin ${S.a}° = <b>${fmt(f,3)} N</b>`;
+  const pts=[];for(let a=0;a<=90;a+=2)pts.push([a,S.B*Math.abs(S.I)*S.L/100*Math.sin(a*Math.PI/180)]);
+  const ym=Math.max(0.05,S.B*Math.abs(S.I)*S.L/100)*1.15;
+  graph.draw({x:[0,90],y:[0,ym],xl:'α (độ)',yl:'F (N)',xTicks:[0,15,30,45,60,75,90],lines:[{pts,color:'hot'}],dots:[{x:S.a,y:f,r:6,color:'hot',ring:true}]});}
+VL.loop(dt=>{draw(dt);ui();});
+})();
+</script>

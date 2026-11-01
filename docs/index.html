@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vật lí 12 tương tác</title>
+<meta name="description" content="Sách Vật lí 12 tương tác: mô phỏng 3D, công thức sống, dự đoán và bài tập theo chương trình GDPT 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/book.css">
+</head>
+<body>
+<style>
+.cover{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:center;padding-block:28px 34px;border-bottom:1.5px solid var(--ink)}
+@media (max-width:820px){.cover{grid-template-columns:1fr}}
+.cover h1{font-size:clamp(2.6rem,7vw,5rem);line-height:.95;letter-spacing:-.03em}
+.cover h1 span{display:block;color:var(--accent)}
+.cover .lede{max-width:52ch;color:var(--ink-2);margin-top:16px;font-size:1.05rem}
+.cover .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.hero{position:relative;aspect-ratio:1/0.85;max-width:100%;border:1.5px solid var(--ink);border-radius:6px;background:var(--card);overflow:hidden;touch-action:pan-y}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero .tag{position:absolute;left:12px;bottom:10px;font-family:var(--f-mono);font-size:.72rem;color:var(--ink-2)}
+.topic{margin-top:44px;display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px}
+@media (max-width:760px){.topic{grid-template-columns:1fr;gap:10px}}
+.topic-head{border-top:1.5px solid var(--ink);padding-top:10px;align-self:start}
+.topic-head .n{font-family:var(--f-mono);font-size:.78rem;color:var(--ink-2)}
+.topic-head h2{font-size:1.6rem;margin-top:2px}
+.topic-head p{font-size:.88rem;color:var(--ink-2);margin-top:6px}
+.lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.lesson{display:grid;grid-template-rows:auto 1fr auto;gap:6px;border:1.5px solid var(--ink);border-radius:6px;background:var(--card);padding:14px;text-decoration:none;min-width:0}
+.lesson:hover{background:var(--ink);color:var(--paper)}
+.lesson:hover .sim,.lesson:hover .no{color:var(--paper);opacity:.8}
+.lesson .no{font-family:var(--f-mono);font-size:.74rem;color:var(--ink-2)}
+.lesson h3{font-size:1.08rem;line-height:1.25}
+.lesson .sim{font-size:.84rem;color:var(--ink-2)}
+.dots{display:flex;gap:5px;align-items:center;font-family:var(--f-mono);font-size:.7rem;color:var(--ink-2)}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--rule);display:inline-block}
+.dots i.on{background:var(--stamp);border-color:var(--stamp)}
+.lesson:hover .dots{color:var(--paper)}
+.howto{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.howto .fact h3{font-size:1.1rem}
+</style>
+<div class="wrap">
+  <header class="cover">
+    <div>
+      <div class="eyebrow">Sách tương tác · Chương trình GDPT 2018</div>
+      <h1>Vật lí 12 <span>nhìn tận mắt</span></h1>
+      <p class="lede">Mười bài học, mỗi bài một thí nghiệm 3D chạy ngay trong trình duyệt. Học sinh dự đoán, tự tay thử, rồi mới đọc công thức. Giáo viên có thể chiếu thẳng lên lớp.</p>
+      <div class="meta"><span class="pill" style="color:var(--cold)">Vật lí nhiệt</span><span class="pill" style="color:var(--accent)">Khí lí tưởng</span><span class="pill" style="color:var(--violet)">Từ trường</span><span class="pill" style="color:var(--hot)">Vật lí hạt nhân</span></div>
+      <p class="note" id="progress" style="margin-top:14px"></p>
+    </div>
+    <div class="hero" id="hero"><span class="tag">kéo để xoay · màu theo tốc độ phân tử</span></div>
+  </header>
+
+  <div id="toc"></div>
+
+  <section class="howto">
+    <div class="fact"><div class="eyebrow">Cho học sinh</div><h3>Mỗi bài có bốn bước</h3><p>Dự đoán trước khi xem, thử trên mô phỏng, đọc phần chứng minh, rồi tự giải bài tập và lật đáp án. Hoàn thành mỗi bước được một con dấu.</p></div>
+    <div class="fact"><div class="eyebrow">Cho giáo viên</div><h3>Chiếu lên lớp</h3><p>Nút "Trình chiếu" phóng to chữ và số liệu, ẩn phần ghi chú. Cuối mỗi bài có mục ghi chú giáo viên: yêu cầu cần đạt, tiến trình gợi ý, quan niệm sai thường gặp.</p></div>
+    <div class="fact"><div class="eyebrow">Chạy trên mọi máy</div><h3>Không cần cài đặt</h3><p>Hình 3D được vẽ bằng Canvas, không đòi card đồ hoạ. Trang chạy được trên điện thoại, máy tính phòng máy, và cả khi mở trực tiếp từ thư mục không có mạng.</p></div>
+  </section>
+
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), dùng được với cả ba bộ sách. Không trích nội dung hay hình ảnh từ sách giáo khoa.</footer>
+</div>
+<script src="assets/core.js"></script>
+<script>
+(function(){
+const {$}=VL;
+const stamps=VL.stamps();
+const desc={1:'Phân tử, nội năng, nhiệt lượng và sự chuyển thể.',2:'Áp suất từ va chạm phân tử và ba định luật chất khí.',3:'Lực từ, từ thông, cảm ứng điện từ và dòng điện xoay chiều.',4:'Cấu trúc hạt nhân, năng lượng liên kết và phóng xạ.'};
+let html='',done=0,total=0;
+[1,2,3,4].forEach(t=>{
+  html+=`<section class="topic"><div class="topic-head"><div class="n">Chủ đề ${t}</div><h2>${VL.TOPICS[t]}</h2><p>${desc[t]}</p></div><div class="lessons">`;
+  VL.LESSONS.forEach((l,i)=>{if(l.topic!==t)return;const s=stamps[l.id]||{};const k=['predict','lab','ex'].filter(x=>s[x]).length;done+=k;total+=3;
+    html+=`<a class="lesson" href="bai/${l.file}"><span class="no">Bài ${i+1}</span><h3>${l.title}</h3><span class="sim">${l.sim}</span><span class="dots">${['predict','lab','ex'].map(x=>`<i class="${s[x]?'on':''}"></i>`).join('')}<span>${k}/3 con dấu</span></span></a>`;});
+  html+='</div></section>';});
+$('toc').innerHTML=html;
+$('progress').textContent=done?`Bạn đã có ${done}/${total} con dấu trên máy này.`:'Tiến độ (con dấu) được lưu ngay trên trình duyệt của bạn.';
+// hero: a little box of gas, cold on the left, hot on the right, mixing
+const st=VL.Ink3D($('hero'),{target:[0,0,0],dist:7.5,az:0.7,el:0.35,rotateSpeed:0.15});
+const N=160,P=[];for(let i=0;i<N;i++){const hot=i%2===0;const s=hot?2.4:0.5;P.push({p:[(Math.random()*1.4+(hot?0.1:-1.5)),Math.random()*3-1.5,Math.random()*3-1.5],v:[(Math.random()-.5)*s*2,(Math.random()-.5)*s*2,(Math.random()-.5)*s*2]});}
+VL.loop(dt=>{const T=VL.tok;st.begin(dt);const b=1.5;
+  for(const q of P){for(let k=0;k<3;k++){q.p[k]+=q.v[k]*dt;if(q.p[k]>b){q.p[k]=2*b-q.p[k];q.v[k]=-Math.abs(q.v[k]);}if(q.p[k]<-b){q.p[k]=-2*b-q.p[k];q.v[k]=Math.abs(q.v[k]);}}
+    const sp=Math.hypot(...q.v);st.sphere(q.p,0.075,VL.heat(Math.min(1,sp/3.6)));}
+  const c=[[-b,-b,-b],[b,-b,-b],[b,-b,b],[-b,-b,b]];const u=c.map(p=>[p[0],b,p[2]]);
+  st.line(c.concat([c[0]]),T.ink,1.4);st.line(u.concat([u[0]]),T.rule,1);for(let i=0;i<4;i++)st.line([c[i],u[i]],T.rule,1);
+  st.end();});
+})();
+</script>
+
+</body>
+</html>

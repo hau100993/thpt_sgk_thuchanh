@@ -1,0 +1,164 @@
+<!-- title: Hạt nhân và năng lượng liên kết · Vật lí 12 -->
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Vật lí hạt nhân · Cấu trúc hạt nhân · Độ hụt khối · Năng lượng liên kết</div>
+      <h1>Bên trong hạt nhân</h1>
+      <p class="lede">Hạt nhân được ghép từ proton và neutron. Điều lạ là cả khối lại nhẹ hơn tổng khối lượng các hạt riêng lẻ. Phần khối lượng "biến mất" đó chính là năng lượng giữ chúng lại với nhau.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" style="color:var(--hot)">proton</span><span class="pill" style="color:var(--ink-2)">neutron</span></div>
+      <div class="legend" id="symbol" style="font-size:1rem"></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="nucSel">Hạt nhân</label><select id="nucSel"></select></div>
+      <div class="row"><button class="btn solid" type="button" id="splitBtn">Tách rời các nucleon</button></div>
+      <div class="readout">
+        <div><small>Proton Z</small><strong id="rZ"></strong></div>
+        <div><small>Neutron N</small><strong id="rN"></strong></div>
+        <div><small>Bán kính</small><strong id="rR"></strong> <em>fm</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq">Δ<i>m</i> = <i>Z</i>·<i>m</i><sub>p</sub> + <i>N</i>·<i>m</i><sub>n</sub> − <i>m</i><sub>X</sub></div>
+        <div class="eqline" id="eqM"></div>
+        <div class="eq" style="font-size:1.2rem"><i>W</i><sub>lk</sub> = Δ<i>m</i>·<i>c</i>²</div>
+        <div class="eqline" id="eqW"></div>
+        <div class="law" id="eqA"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Năng lượng liên kết riêng theo số khối</h3><p>Đỉnh của đường cong ở quanh A ≈ 56 (sắt, niken). Hạt nhân nhẹ hợp lại (nhiệt hạch) hoặc hạt nhân nặng vỡ ra (phân hạch) đều đi về phía đỉnh và toả năng lượng.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Hạt nhân nào dưới đây bền vững nhất?</p>
+      <div class="choices" data-correct="fe">
+        <button class="choice" type="button" data-k="he">Heli ⁴He</button>
+        <button class="choice" type="button" data-k="fe">Sắt ⁵⁶Fe</button>
+        <button class="choice" type="button" data-k="u">Urani ²³⁵U</button>
+        <button class="choice" type="button" data-k="h">Đơteri ²H</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Urani có năng lượng liên kết lớn nhất vì có nhiều nucleon, nhưng độ bền được đo bằng năng lượng liên kết riêng (tính cho mỗi nucleon), và sắt đứng gần đỉnh." data-wrong="Chưa đúng. Đừng so tổng năng lượng liên kết: hạt nhân nhiều nucleon dĩ nhiên có tổng lớn. Hãy so năng lượng liên kết cho mỗi nucleon trên đồ thị."></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Chọn lần lượt ²H, ⁴He, ⁵⁶Fe, ²³⁵U và so sánh Wlk với Wlk/A.</li>
+        <li>Bấm "Tách rời các nucleon": để tách hạt nhân thành các nucleon riêng rẽ phải cung cấp đúng năng lượng Wlk.</li>
+        <li>Để ý bán kính: thể tích hạt nhân tỉ lệ với A, nên bán kính tỉ lệ với ∛A.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Kí hiệu</div><div class="eq"><sup><i>A</i></sup><sub><i>Z</i></sub>X</div><p>Z là số proton (nguyên tử số), A = Z + N là số khối. Các đồng vị có cùng Z, khác N.</p></div>
+        <div class="fact"><div class="eyebrow">Lực hạt nhân</div><div class="eq">rất mạnh · tầm ~10⁻¹⁵ m</div><p>Lực hút giữa các nucleon thắng lực đẩy điện giữa các proton, nhưng chỉ tác dụng khi các nucleon ở rất gần nhau.</p></div>
+        <div class="fact"><div class="eyebrow">Hệ thức Einstein</div><div class="eq"><i>E</i> = <i>mc</i>²</div><p>1 u tương đương 931,5 MeV. Khi các nucleon liên kết, hệ toả ra năng lượng và khối lượng giảm đi tương ứng.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Hạt nhân ⁴₂He có khối lượng 4,0015 u. Cho m<sub>p</sub> = 1,0073 u, m<sub>n</sub> = 1,0087 u, 1 u = 931,5 MeV/c². Tính năng lượng liên kết.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>Δm = 2 × 1,0073 + 2 × 1,0087 − 4,0015 = 0,0305 u; W = 0,0305 × 931,5 ≈ 28,4 MeV</code>.</div></div>
+      <div class="flip"><p class="q">Tính năng lượng liên kết riêng của ⁴He ở câu trên.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>W/A = 28,4 / 4 ≈ 7,1 MeV/nucleon</code>.</div></div>
+      <div class="flip"><p class="q">⁵⁶Fe có Wlk/A ≈ 8,79 MeV, ²³⁵U có Wlk/A ≈ 7,59 MeV. Hạt nhân nào bền hơn? Hạt nhân nào có tổng năng lượng liên kết lớn hơn?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>⁵⁶Fe bền hơn vì Wlk/A lớn hơn. Tổng: Fe ≈ 8,79 × 56 ≈ 492 MeV; U ≈ 7,59 × 235 ≈ 1 784 MeV, nên ²³⁵U có tổng lớn hơn.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Mô tả cấu trúc hạt nhân; viết kí hiệu hạt nhân.</li>
+          <li>Nêu độ hụt khối, năng lượng liên kết, năng lượng liên kết riêng; dùng đồ thị Wlk/A để so sánh độ bền.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Cho học sinh tính tay Δm của ⁴He trước, rồi mới chọn ⁴He trên trang để đối chiếu.</li>
+          <li>Từ đồ thị, gợi mở bài phản ứng phân hạch và nhiệt hạch: vì sao cả hai đều toả năng lượng?</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Năng lượng liên kết riêng của các hạt nhân trong danh sách là giá trị đo thực nghiệm (làm tròn). Đường cong là công thức khối lượng bán thực nghiệm, chỉ để thấy xu hướng.</li>
+          <li>Vị trí proton và neutron trong mô hình là minh hoạ; hạt nhân thật không có cấu trúc cứng như vậy.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<!--CORE-->
+<script>
+(function(){
+const {$,fmt,V}=VL;
+VL.chrome('09');
+const MP=1.007276,MN=1.008665,U=931.5;
+const NUC=[['H','Đơteri',1,2,1.112],['He','Heli',2,4,7.074],['Li','Liti',3,7,5.606],['C','Cacbon',6,12,7.680],['O','Oxi',8,16,7.976],['Ne','Neon',10,20,8.032],
+  ['Fe','Sắt',26,56,8.790],['Sn','Thiếc',50,120,8.505],['Ba','Bari',56,138,8.393],['Pb','Chì',82,208,7.868],['U','Urani',92,235,7.591],['U','Urani',92,238,7.570]];
+const sup=n=>String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[+c]).join('');
+$('nucSel').innerHTML=NUC.map((n,i)=>`<option value="${i}"${i===1?' selected':''}>${sup(n[3])}${n[0]} · ${n[1]} (Z = ${n[2]}, A = ${n[3]})</option>`).join('');
+// fcc lattice sites sorted by distance
+const sites=[];{const a=Math.SQRT2;for(let i=-5;i<=5;i++)for(let j=-5;j<=5;j++)for(let k=-5;k<=5;k++){if((i+j+k)&1)continue;const p=[i*a/2,j*a/2,k*a/2];sites.push({p,d:Math.hypot(...p)+((i*7+j*13+k*29)%10)*1e-4});}sites.sort((x,y)=>x.d-y.d);}
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};}
+const S={i:1,split:0,target:0,nuc:[],seen:new Set()};
+const tried=VL.Tried({light:'hạt nhân nhẹ',mid:'hạt nhân trung bình',heavy:'hạt nhân nặng',split:'tách rời nucleon'},$('tried'));
+function build(){const [sym,,Z,A]=NUC[S.i];const r=rng(A*31+Z);const pts=sites.slice(0,A).map(s=>s.p);
+  const c=pts.reduce((a,p)=>V.add(a,p),[0,0,0]).map(v=>v/A);
+  const isP=new Array(A).fill(false);const idx=[...Array(A).keys()];for(let i=A-1;i>0;i--){const j=Math.floor(r()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}for(let k=0;k<Z;k++)isP[idx[k]]=true;
+  S.nuc=pts.map((p,k)=>{const home=V.sub(p,c);const dir=V.norm(V.add(home,[r()-.5,r()-.5,r()-.5]));return{home,far:V.add(V.mul(home,1.8),V.mul(dir,4+r()*4)),p:isP[k]};});
+  S.split=0;S.target=0;$('splitBtn').textContent='Tách rời các nucleon';
+  if(A<=7)tried.add('light');else if(A<=140)tried.add('mid');else tried.add('heavy');}
+$('nucSel').addEventListener('change',()=>{S.i=+$('nucSel').value;build();});
+$('splitBtn').addEventListener('click',()=>{S.target=S.target?0:1;$('splitBtn').textContent=S.target?'Ghép lại thành hạt nhân':'Tách rời các nucleon';if(S.target)tried.add('split');});
+const st=VL.Ink3D($('stage'),{target:[0,0,0],dist:16,az:0.5,el:0.3,rotateSpeed:0.25});
+const graph=VL.Graph($('graph'));
+function semf(A){const Z=A/(1.98+0.0155*Math.pow(A,2/3));const B=15.75*A-17.8*Math.pow(A,2/3)-0.711*Z*(Z-1)/Math.pow(A,1/3)-23.7*(A-2*Z)*(A-2*Z)/A;return B/A;}
+const curve=[];for(let A=4;A<=250;A+=2)curve.push([A,semf(A)]);
+function ui(){const [sym,name,Z,A,wa]=NUC[S.i];const N=A-Z,W=wa*A,dm=W/U,mx=Z*MP+N*MN-dm;
+  $('rZ').textContent=Z;$('rN').textContent=N;$('rR').textContent=fmt(1.2*Math.cbrt(A),2);
+  $('symbol').innerHTML=`<span style="font-family:var(--f-display);font-size:1.6rem;color:var(--ink)"><sup>${A}</sup><sub style="margin-left:-.55em">${Z}</sub>${sym}</span>`;
+  $('eqM').innerHTML=`= ${Z} × ${fmt(MP,6)} + ${N} × ${fmt(MN,6)} − ${fmt(mx,4)} = <b>${fmt(dm,4)} u</b>`;
+  $('eqW').innerHTML=`= ${fmt(dm,4)} × 931,5 = <b>${fmt(W,1)} MeV</b>`;
+  $('eqA').innerHTML=`Năng lượng liên kết riêng: <b>W<sub>lk</sub>/A = ${fmt(wa,3)} MeV/nucleon</b>`+(S.split>0.5?`. Đã cung cấp ${fmt(W*S.split,0)} MeV để tách rời.`:'');
+  graph.draw({x:[0,250],y:[0,9.5],xl:'số khối A',yl:'Wlk/A (MeV)',xTicks:[0,50,100,150,200,250],yTicks:[0,2,4,6,8],
+    lines:[{pts:curve,color:'rule',width:2,dash:[5,4]}],
+    dots:NUC.map((n,i)=>({x:n[3],y:n[4],r:i===S.i?7:3.5,color:i===S.i?'hot':'ink-2',ring:i===S.i})),
+    texts:NUC.filter((n,i)=>i!==11).map(n=>({x:n[3],y:n[4],text:sup(n[3])+n[0],dx:5,dy:n[3]<10?-6:10,base:'top'}))});}
+build();
+let tt=0;
+VL.loop(dt=>{
+  S.split+=(S.target-S.split)*Math.min(1,dt*2.5);{const Ad=NUC[S.i][3];const want=(6+Math.cbrt(Ad)*2.2)*(1+S.split*0.9);st.dist+=(want-st.dist)*Math.min(1,dt*3);}
+  const T=VL.tok;st.begin(dt);const A=NUC[S.i][3];const sc=A>100?1:A>20?1.1:1.3;
+  for(const n of S.nuc){const p=V.add(V.mul(n.home,(1-S.split)*sc),V.mul(n.far,S.split*sc));st.sphere(p,0.52*sc,n.p?T.hot:VL.mix(T['ink-2'],T.card,0.25));}
+  if(S.split<0.05){const r=Math.cbrt(A)*0.62*sc+0.4;st.line(st.ring([0,0,0],r,st.cam?V.norm(st.cam):[0,0,1],60),T.rule,1,{dash:[3,4],zb:-100});}
+  st.end();
+  tt+=dt;if(tt>0.15){tt=0;ui();}
+});
+ui();
+})();
+</script>

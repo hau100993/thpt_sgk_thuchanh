@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Động học phân tử chất khí · Vật lí 12</title>
+<meta name="description" content="Sách Vật lí 12 tương tác: mô phỏng 3D, công thức sống, dự đoán và bài tập theo chương trình GDPT 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Khí lí tưởng · Mô hình động học phân tử · Áp suất và động năng</div>
+      <h1>Bên trong một bình khí</h1>
+      <p class="lede">Không có phân tử nào đứng yên, cũng không có hai phân tử nào chạy cùng tốc độ. Đồ thị bên dưới đếm tốc độ của từng phân tử trong bình, và nhiệt độ quyết định hình dạng của nó.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="legend"><span>chậm</span><span class="bar"></span><span>nhanh</span></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="gasSel">Chất khí</label>
+        <select id="gasSel"><option value="4">Heli (He) · M = 4 g/mol</option><option value="28" selected>Nitơ (N₂) · M = 28 g/mol</option><option value="32">Oxi (O₂) · M = 32 g/mol</option><option value="44">Cacbon đioxit (CO₂) · M = 44 g/mol</option></select></div>
+      <div class="ctl"><label for="sT">Nhiệt độ T <output id="oT"></output></label><input type="range" id="sT" min="100" max="1200" step="10" value="300"></div>
+      <div class="row"><label class="row note"><input type="checkbox" id="trackChk" checked> Theo dõi một phân tử</label><label class="row note"><input type="checkbox" id="brownChk"> Thả hạt phấn hoa (Brown)</label></div>
+      <div class="readout">
+        <div><small>v căn quân phương</small><strong id="rV"></strong> <em>m/s</em></div>
+        <div><small>Động năng TB</small><strong id="rK"></strong> <em>·10⁻²¹ J</em></div>
+        <div><small>Nhiệt độ</small><strong id="rT"></strong> <em>K</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq"><i>W</i>̄<sub>đ</sub> = <span style="font-size:.8em">3/2</span>·<i>kT</i></div>
+        <div class="eqline" id="eqK"></div>
+        <div class="eq" style="font-size:1.2rem"><i>v</i><sub>rms</sub> = √(3<i>RT</i>/<i>M</i>)</div>
+        <div class="eqline" id="eqV"></div>
+        <div class="law">Động năng trung bình chỉ phụ thuộc nhiệt độ, không phụ thuộc loại khí. Khí nhẹ thì chạy nhanh hơn để có cùng động năng.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Phân bố tốc độ phân tử</h3><p>Cột: số phân tử đếm được trong mô phỏng. Đường: phân bố Maxwell theo lí thuyết. Vạch dọc: tốc độ căn quân phương.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Nhiệt độ tuyệt đối của khí tăng gấp 4 lần (ví dụ từ 300 K lên 1 200 K). Tốc độ căn quân phương của phân tử thay đổi thế nào?</p>
+      <div class="choices" data-correct="x2">
+        <button class="choice" type="button" data-k="x4">Tăng 4 lần</button>
+        <button class="choice" type="button" data-k="x2">Tăng 2 lần</button>
+        <button class="choice" type="button" data-k="x16">Tăng 16 lần</button>
+        <button class="choice" type="button" data-k="x1">Không đổi</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Động năng tỉ lệ với T, mà động năng tỉ lệ với v², nên v tỉ lệ với √T. Kéo T từ 300 K lên 1 200 K và đọc vạch v_rms trên đồ thị." data-wrong="Chưa đúng. Nhiệt độ tỉ lệ với động năng, tức là với v². Kéo T từ 300 K lên 1 200 K và đọc số đo v_rms."></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Đổi chất khí ở cùng nhiệt độ: động năng trung bình không đổi, nhưng v_rms của heli lớn gần 2,7 lần nitơ.</li>
+        <li>Đổi nhiệt độ thật nhiều (ví dụ lên 1 200 K): đường phân bố thấp xuống và trải rộng sang phải.</li>
+        <li>Theo dõi một phân tử: đường đi gấp khúc, đổi hướng mỗi lần va vào thành bình.</li>
+        <li>Thả hạt phấn hoa: một hạt lớn bị vô số phân tử nhỏ va đập, chuyển động lắc lư hỗn loạn. Đó là chuyển động Brown.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Mỗi lần một phân tử khối lượng m đập vào thành với thành phần vận tốc vuông góc vₓ rồi bật lại, nó truyền cho thành một xung lượng 2mvₓ. Cộng tất cả các va chạm trong một giây trên một đơn vị diện tích, và vì chuyển động hỗn loạn đều theo ba phương nên trung bình vₓ² = v̄²/3, ta được:</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Áp suất chất khí</div><div class="eq"><i>p</i> = ⅓·μ·<i>m</i>·<i>v</i>̄²</div><p>μ là số phân tử trong một đơn vị thể tích. Phân tử càng dày, càng nhanh thì áp suất càng lớn.</p></div>
+        <div class="fact"><div class="eyebrow">Nhiệt độ và động năng</div><div class="eq"><i>W</i>̄<sub>đ</sub> = <span style="font-size:.8em">3/2</span>·<i>kT</i></div><p>So với pV = nRT suy ra động năng tịnh tiến trung bình tỉ lệ với T. k = R/N<sub>A</sub> = 1,38·10⁻²³ J/K là hằng số Boltzmann.</p></div>
+        <div class="fact"><div class="eyebrow">Chuyển động Brown</div><div class="eq">bằng chứng của phân tử</div><p>Hạt nhỏ lơ lửng chuyển động hỗn loạn không ngừng vì bị các phân tử chất lỏng hoặc khí va đập không đều từ mọi phía.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Tính động năng tịnh tiến trung bình của một phân tử khí ở 27 °C.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>W = 3/2·kT = 1,5 × 1,38·10⁻²³ × 300 ≈ 6,21·10⁻²¹ J</code>.</div></div>
+      <div class="flip"><p class="q">Tính tốc độ căn quân phương của phân tử oxi (M = 32 g/mol) ở 27 °C.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>v = √(3RT/M) = √(3 × 8,31 × 300 / 0,032) ≈ 483 m/s</code>. Chú ý đổi M sang kg/mol.</div></div>
+      <div class="flip"><p class="q">Ở cùng nhiệt độ, tỉ số tốc độ căn quân phương của heli và oxi là bao nhiêu?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>v_He / v_O₂ = √(M_O₂ / M_He) = √(32/4) = √8 ≈ 2,83</code>.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Nêu các giả thuyết của thuyết động học phân tử chất khí.</li>
+          <li>Giải thích áp suất chất khí bằng va chạm; nêu biểu thức áp suất và mối liên hệ động năng – nhiệt độ.</li>
+          <li>Mô tả chuyển động Brown như bằng chứng về chuyển động hỗn loạn của phân tử.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Cho học sinh đoán hình dạng biểu đồ tốc độ trước khi hiện ra: có phải mọi phân tử cùng tốc độ?</li>
+          <li>So sánh He và CO₂ ở cùng nhiệt độ: đường phân bố của He rộng và thấp hơn.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Phân tử trong mô phỏng không va chạm với nhau (khí lí tưởng), nhưng phân bố tốc độ được giữ đúng dạng Maxwell. Tốc độ trên màn hình đã thu nhỏ để mắt theo kịp; số liệu m/s là giá trị thật.</li>
+          <li>Hạt Brown có khối lượng gấp 60 lần phân tử và va chạm đàn hồi với các phân tử khí.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<script src="../assets/core.js"></script>
+<script>
+(function(){
+const {$,fmt}=VL;
+VL.chrome('04');
+const R=8.314,KB=1.380649e-23,H=2.2,N=320;
+const S={T:300,M:28};
+const vrms=()=>Math.sqrt(3*R*S.T/(S.M/1000));
+// screen speed: sigma proportional to sqrt(T/M), normalised so N2 at 300K -> 0.75
+const sig=()=>0.75*Math.sqrt((S.T/300)/(S.M/28));
+const gas=VL.GasSim({R:1.1});gas.alloc(N,H,sig());
+const st=VL.Ink3D($('stage'),{target:[0,1.1,0],dist:6.6,az:0.4,el:0.35});
+const graph=VL.Graph($('graph'));
+const tried=VL.Tried({gas:'đổi chất khí',temp:'đổi nhiệt độ',brown:'hạt Brown'},$('tried'));
+$('sT').addEventListener('input',()=>{S.T=+$('sT').value;if(Math.abs(S.T-300)>=300)tried.add('temp');});
+$('gasSel').addEventListener('change',()=>{S.M=+$('gasSel').value;tried.add('gas');});
+$('trackChk').addEventListener('change',()=>{if($('trackChk').checked)tried.add('track');trail.length=0;});
+$('brownChk').addEventListener('change',()=>{if($('brownChk').checked){tried.add('brown');bb.p=[0,H/2,0];bb.v=[0,0,0];btrail.length=0;}});
+const trail=[],btrail=[];const bb={p:[0,H/2,0],v:[0,0,0],r:0.17,m:60};
+function brown(dt){const g=gas,R2=(bb.r+0.04)**2;
+  for(let i=0;i<g.count;i++){const dx=g.px[i]-bb.p[0],dy=g.py[i]-bb.p[1],dz=g.pz[i]-bb.p[2];const d2=dx*dx+dy*dy+dz*dz;if(d2>R2)continue;
+    const d=Math.sqrt(d2)||1e-6,nx=dx/d,ny=dy/d,nz=dz/d;const rel=(g.vx[i]-bb.v[0])*nx+(g.vy[i]-bb.v[1])*ny+(g.vz[i]-bb.v[2])*nz;if(rel>=0)continue;
+    const j=2*rel/(1+1/bb.m);g.vx[i]-=j*nx;g.vy[i]-=j*ny;g.vz[i]-=j*nz;bb.v[0]+=j*nx/bb.m;bb.v[1]+=j*ny/bb.m;bb.v[2]+=j*nz/bb.m;
+    g.px[i]=bb.p[0]+nx*(bb.r+0.041);g.py[i]=bb.p[1]+ny*(bb.r+0.041);g.pz[i]=bb.p[2]+nz*(bb.r+0.041);}
+  for(let k=0;k<3;k++)bb.p[k]+=bb.v[k]*dt;
+  const rr=Math.hypot(bb.p[0],bb.p[2]),lim=1.1-bb.r;if(rr>lim){const nx=bb.p[0]/rr,nz=bb.p[2]/rr,vn=bb.v[0]*nx+bb.v[2]*nz;if(vn>0){bb.v[0]-=2*vn*nx;bb.v[2]-=2*vn*nz;}bb.p[0]=nx*lim;bb.p[2]=nz*lim;}
+  if(bb.p[1]<bb.r){bb.p[1]=bb.r;bb.v[1]=Math.abs(bb.v[1]);}if(bb.p[1]>H-bb.r){bb.p[1]=H-bb.r;bb.v[1]=-Math.abs(bb.v[1]);}}
+let hist=new Float64Array(30),tt=0;
+function ui(){const v=vrms(),K=1.5*KB*S.T;
+  $('oT').textContent=S.T+' K · '+(S.T-273)+' °C';$('rV').textContent=fmt(v,0);$('rK').textContent=fmt(K*1e21,2);$('rT').textContent=S.T;
+  $('eqK').innerHTML=`= 1,5 × 1,38·10⁻²³ × ${S.T} = <b>${fmt(K*1e21,2)}·10⁻²¹ J</b>`;
+  $('eqV').innerHTML=`= √(3 × 8,31 × ${S.T} / ${fmt(S.M/1000,3)}) = <b>${fmt(v,0)} m/s</b>`;}
+VL.loop(dt=>{
+  const s=sig();for(let i=0;i<3;i++){gas.step(dt/3,H,0);if($('brownChk').checked)brown(dt/3);}
+  gas.thermostat(s);
+  const T=VL.tok;st.begin(dt);
+  gas.draw(st,H,H,{piston:false,speedRef:s*Math.sqrt(3)*1.6,radius:0.04});
+  st.line(st.ring([0,H,0],1.1,[0,1,0],48),T.ink,1.6);
+  if($('trackChk').checked){trail.push([gas.px[0],gas.py[0],gas.pz[0]]);if(trail.length>140)trail.shift();
+    st.line(trail,T.bad,1.6,{a:0.8});st.sphere([gas.px[0],gas.py[0],gas.pz[0]],0.07,T.bad);}
+  if($('brownChk').checked){btrail.push(bb.p.slice());if(btrail.length>600)btrail.shift();st.line(btrail,T.violet,1.8,{a:0.85});st.sphere(bb.p,bb.r,T.green);}
+  st.end();
+  // histogram of real speeds
+  const scale=vrms()/(s*Math.sqrt(3));const vmax=Math.max(2500,Math.ceil(vrms()*2.6/500)*500);const bins=hist.length,bw=vmax/bins;
+  const cnt=new Float64Array(bins);for(let i=0;i<gas.count;i++){const v=gas.speed(i)*scale;const b=Math.floor(v/bw);if(b<bins)cnt[b]++;}
+  for(let b=0;b<bins;b++)hist[b]+=(cnt[b]/gas.count/bw-hist[b])*0.06;
+  const a=Math.sqrt(R*S.T/(S.M/1000));const pts=[];for(let v=0;v<=vmax;v+=vmax/120){pts.push([v,Math.sqrt(2/Math.PI)*v*v/(a*a*a)*Math.exp(-v*v/(2*a*a))]);}
+  const peak=Math.sqrt(2/Math.PI)*2/a*Math.exp(-1);
+  const lines=[];for(let b=0;b<bins;b++){const x0=b*bw,x1=(b+1)*bw,h=hist[b];lines.push({pts:[[x0,0],[x0,h],[x1,h],[x1,0]],color:'cold',width:1.5,a:0.9});}
+  lines.push({pts,color:'hot',width:2.5});lines.push({pts:[[vrms(),0],[vrms(),peak*1.4]],color:'ink',width:1.5,dash:[5,4]});
+  graph.draw({x:[0,vmax],y:[0,peak*1.45],xl:'tốc độ (m/s)',yl:'tỉ lệ phân tử (s/m)',lines,yFmt:v=>v===0?'0':VL.sci(v,1),texts:[{x:vrms(),y:peak*1.38,text:'v_rms',dx:6,color:'ink',base:'top'}]});
+  tt+=dt;if(tt>0.12){tt=0;ui();}
+});
+ui();
+})();
+</script>
+
+</body>
+</html>

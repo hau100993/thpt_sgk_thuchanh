@@ -1,0 +1,191 @@
+<!-- title: Định luật chất khí · Vật lí 12 -->
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Khí lí tưởng · Định luật Boyle, Charles, phương trình trạng thái</div>
+      <h1>Các định luật chất khí</h1>
+      <p class="lede">Một xi-lanh chứa vài trăm phân tử khí. Kéo pít-tông, đun nóng, thêm khí, rồi xem áp suất sinh ra từ chính các cú va chạm của phân tử vào thành bình.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="legend"><span>chậm</span><span class="bar"></span><span>nhanh</span></div>
+    </div>
+    <div class="panel">
+      <div class="modes" role="group" aria-label="Kiểu quá trình">
+        <button class="mode" type="button" data-mode="free" aria-pressed="true"><b>Tự do</b><span>đổi mọi thông số</span></button>
+        <button class="mode" type="button" data-mode="T"><b>Đẳng nhiệt</b><span>T không đổi · Boyle</span></button>
+        <button class="mode" type="button" data-mode="p"><b>Đẳng áp</b><span>p không đổi · Charles</span></button>
+        <button class="mode" type="button" data-mode="V"><b>Đẳng tích</b><span>V không đổi</span></button>
+      </div>
+      <div class="ctl" id="ctlV"><label for="sV">Thể tích V <output id="oV">12,5 L</output></label><input type="range" id="sV" min="5" max="25" step="0.1" value="12.5"></div>
+      <div class="ctl" id="ctlT"><label for="sT">Nhiệt độ T <output id="oT">300 K</output></label><input type="range" id="sT" min="150" max="600" step="1" value="300"></div>
+      <div class="ctl" id="ctlN"><label for="sN">Lượng khí n <output id="oN">0,50 mol</output></label><input type="range" id="sN" min="100" max="600" step="20" value="200"></div>
+      <div class="readout">
+        <div><small>Áp suất p</small><strong id="rP">99,8</strong> <em>kPa</em></div>
+        <div><small>Thể tích V</small><strong id="rV">12,5</strong> <em>L</em></div>
+        <div><small>Nhiệt độ</small><strong id="rT">300</strong> <em id="rTc">K</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq"><i>pV</i> = <i>nRT</i></div>
+        <div class="eqline" id="lhs"></div>
+        <div class="eqline" id="rhs"></div>
+        <div class="law" id="law"></div>
+        <div class="note" id="measured"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3 id="graphTitle">Đồ thị p – V</h3><p id="graphNote"></p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Giữ nhiệt độ không đổi ở 300 K. Nén lượng khí từ <b>20 L</b> xuống còn <b>10 L</b>. Áp suất của khí sẽ thế nào?</p>
+      <div class="choices" data-correct="double">
+        <button class="choice" type="button" data-k="half">Giảm một nửa</button>
+        <button class="choice" type="button" data-k="same">Không đổi</button>
+        <button class="choice" type="button" data-k="double">Tăng gấp đôi</button>
+        <button class="choice" type="button" data-k="four">Tăng gấp bốn</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Cùng số phân tử, cùng tốc độ, nhưng không gian chỉ còn một nửa nên mỗi giây có gấp đôi số cú va chạm lên mỗi đơn vị diện tích." data-wrong="Chưa đúng. Hãy bấm thí nghiệm kiểm chứng và nhìn số đo áp suất khi thể tích giảm từ 20 L về 10 L."></p>
+      <div><button class="btn solid" type="button" id="proveBtn">Chạy thí nghiệm kiểm chứng</button></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <p>Thử lần lượt ba quá trình ở bảng bên trên. Mỗi quá trình khoá một đại lượng và cho hai đại lượng còn lại thay đổi. Để ý màu của phân tử khi đổi nhiệt độ, và mật độ phân tử khi đổi thể tích.</p>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Ở bài trước, mô hình động học cho <b>p = ⅓·(N/V)·m·v̄²</b>, và nhiệt độ tuyệt đối tỉ lệ với động năng trung bình của phân tử. Ghép hai điều đó lại được phương trình trạng thái <b>pV = nRT</b>, với R = 8,31 J/(mol·K). Ba định luật dưới đây là các trường hợp riêng khi giữ một đại lượng không đổi.</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Đẳng nhiệt · Boyle</div><div class="eq"><i>p</i>₁<i>V</i>₁ = <i>p</i>₂<i>V</i>₂</div><p>Thể tích giảm thì phân tử đập vào thành dày hơn. Áp suất tỉ lệ nghịch với thể tích. Đồ thị p – V là đường hyperbol.</p></div>
+        <div class="fact"><div class="eyebrow">Đẳng áp · Charles</div><div class="eq"><i>V</i>₁/<i>T</i>₁ = <i>V</i>₂/<i>T</i>₂</div><p>Phân tử nhanh hơn thì đẩy pít-tông lên tới khi áp suất cân bằng trở lại. Thể tích tỉ lệ thuận với T tính theo kelvin.</p></div>
+        <div class="fact"><div class="eyebrow">Đẳng tích</div><div class="eq"><i>p</i>₁/<i>T</i>₁ = <i>p</i>₂/<i>T</i>₂</div><p>Bình kín không giãn nở được, nên phân tử nhanh hơn làm áp suất tăng tỉ lệ với nhiệt độ tuyệt đối.</p></div>
+        <div class="fact"><div class="eyebrow">Tổng quát</div><div class="eq"><i>p</i>₁<i>V</i>₁/<i>T</i>₁ = <i>p</i>₂<i>V</i>₂/<i>T</i>₂</div><p>Đúng cho một lượng khí xác định khi cả ba đại lượng cùng thay đổi.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Một lượng khí ở 27 °C có thể tích 6 L và áp suất 100 kPa. Nén đẳng nhiệt đến 4 L. Tính áp suất mới.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Boyle: <code>p₂ = p₁V₁/V₂ = 100 × 6 / 4 = 150 kPa</code>.</div></div>
+      <div class="flip"><p class="q">Khí trong bình kín ở 27 °C có áp suất 2 atm. Đun nóng bình đến 177 °C. Áp suất khí là bao nhiêu?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Đổi sang kelvin: 300 K và 450 K. <code>p₂ = p₁T₂/T₁ = 2 × 450 / 300 = 3 atm</code>. Nếu dùng °C sẽ ra kết quả sai rất xa.</div></div>
+      <div class="flip"><p class="q">10 L khí ở 300 K được đun nóng đẳng áp đến 360 K. Thể tích khí sau khi đun?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Charles: <code>V₂ = V₁T₂/T₁ = 10 × 360 / 300 = 12 L</code>. Có thể kiểm tra ngay trên mô phỏng ở chế độ Đẳng áp.</div></div>
+      <div class="flip"><p class="q">Tính thể tích của 0,5 mol khí ở 27 °C và áp suất 100 kPa.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>V = nRT/p = 0,5 × 8,31 × 300 / 100 ≈ 12,5 L</code> (kPa·L = J). Đây chính là trạng thái ban đầu của mô phỏng.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Thực hiện (hoặc mô phỏng) thí nghiệm để rút ra định luật Boyle và định luật Charles.</li>
+          <li>Dùng phương trình trạng thái để giải các bài toán về khí lí tưởng.</li>
+          <li>Hiểu ý nghĩa của nhiệt độ không tuyệt đối khi kéo dài đường đẳng áp.</li>
+        </ul>
+        <h4>Tiến trình gợi ý (khoảng 20 phút)</h4>
+        <ul>
+          <li>Chiếu chế độ Tự do, hỏi: vì sao khí đẩy được pít-tông?</li>
+          <li>Cả lớp bình chọn ở Bước 1, sau đó bấm "Chạy thí nghiệm kiểm chứng".</li>
+          <li>Chuyển sang Đẳng áp, kéo T xuống thấp: đường V – T kéo dài đi qua gốc 0 K.</li>
+        </ul>
+        <h4>Quan niệm sai thường gặp</h4>
+        <ul>
+          <li>Dùng °C trong các công thức tỉ lệ. Gấp đôi 20 °C không phải là gấp đôi nhiệt độ.</li>
+          <li>Nghĩ rằng phân tử nóng thì to ra. Kích thước phân tử không đổi, chỉ tốc độ thay đổi.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>400 chấm ứng với 1 mol. Dòng "đo từ va chạm" đếm xung lượng thật của các phân tử đập vào thành, nên dao động quanh giá trị lí thuyết, giống một phép đo thực.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<!--CORE-->
+<script>
+(function(){
+const {$, fmt} = VL;
+VL.chrome('05');
+const R_GAS=8.314, H_MAX=2.6, PER_MOL=400;
+const S={mode:'free',Tt:300,T:300,Vt:12.5,V:12.5,N:200,pLock:null};
+const n=()=>S.N/PER_MOL, pTh=()=>n()*R_GAS*S.T/S.V, sig=T=>0.9*Math.sqrt(T/300);
+const gas=VL.GasSim({speedRef:VL.clamp(0.9*Math.sqrt(3)*Math.sqrt(2)*1.25,1,4)});
+gas.alloc(S.N,S.V/10,sig(S.T));
+const st=VL.Ink3D($('stage'),{target:[0,1.3,0],dist:6.6,az:0.6,el:0.32});
+const graph=VL.Graph($('graph'));
+const tried=VL.Tried({T:'Đẳng nhiệt',p:'Đẳng áp',V:'Đẳng tích'},$('tried'));
+const sV=$('sV'),sT=$('sT'),sN=$('sN');
+let hist=[],histT=0,proving=null;
+function setMode(m){S.mode=m;hist=[];
+  document.querySelectorAll('.mode').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+  S.pLock=m==='p'?pTh():null;
+  sV.disabled=(m==='V'||m==='p');sT.disabled=(m==='T');sN.disabled=m!=='free';
+  [['ctlV',m==='V'||m==='p'],['ctlT',m==='T'],['ctlN',m!=='free']].forEach(([id,l])=>{const c=$(id);c.classList.toggle('locked',l);const lab=c.querySelector('label');let k=lab.querySelector('.lk');if(l&&!k){k=document.createElement('span');k.className='lk';k.textContent=id==='ctlV'&&m==='p'?'tự chỉnh':'khoá';lab.insertBefore(k,lab.querySelector('output'));}else if(!l&&k)k.remove();else if(k)k.textContent=id==='ctlV'&&m==='p'?'tự chỉnh':'khoá';});
+  $('graphTitle').textContent={free:'Đồ thị p – V',T:'Đường đẳng nhiệt p – V',p:'Đường đẳng áp V – T',V:'Đường đẳng tích p – T'}[m];
+  $('graphNote').textContent={free:'Mỗi chấm là một trạng thái bạn vừa đi qua. Đường xanh là đường đẳng nhiệt ở nhiệt độ hiện tại.',T:'Kéo V: điểm trượt trên một nhánh hyperbol, tích pV giữ nguyên.',p:'Kéo T: điểm chạy trên đường thẳng. Kéo dài về bên trái, đường đi qua 0 K.',V:'Kéo T: áp suất tăng tuyến tính theo nhiệt độ tuyệt đối.'}[m];
+  tried.add(m);}
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+sV.addEventListener('input',()=>S.Vt=+sV.value);
+sT.addEventListener('input',()=>{let T=+sT.value;
+  if(S.mode==='p'){let V=n()*R_GAS*T/S.pLock;if(V>25){V=25;T=25*S.pLock/(n()*R_GAS);}if(V<5){V=5;T=5*S.pLock/(n()*R_GAS);}S.Vt=V;sV.value=V;}
+  S.Tt=T;});
+sN.addEventListener('input',()=>{S.N=+sN.value;gas.alloc(S.N,S.V/10,sig(S.T));});
+$('proveBtn').addEventListener('click',()=>{S.N=200;sN.value=200;gas.alloc(200,S.V/10,sig(300));S.Tt=S.T=300;sT.value=300;S.V=S.Vt=20;sV.value=20;setMode('T');proving={t:0,p1:null};
+  $('stage').scrollIntoView({behavior:VL.reduce?'auto':'smooth',block:'center'});});
+
+function axes(){if(S.mode==='p')return{x:'T',y:'V',xl:'T (K)',yl:'V (L)'};if(S.mode==='V')return{x:'T',y:'p',xl:'T (K)',yl:'p (kPa)'};return{x:'V',y:'p',xl:'V (L)',yl:'p (kPa)'};}
+const val=k=>k==='T'?S.T:k==='V'?S.V:pTh();
+function niceMax(v){const e=Math.pow(10,Math.floor(Math.log10(v)));const m=v/e;return(m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*e;}
+function drawGraph(){const A=axes();const xMax=A.x==='T'?650:26;let yMax;
+  if(A.y==='V')yMax=26;else{let m=A.x==='V'?n()*R_GAS*S.T/5:n()*R_GAS*650/S.V;hist.forEach(p=>m=Math.max(m,p[1]));yMax=niceMax(m*1.08);}
+  const lines=[],texts=[];
+  if(A.x==='V'){const pts=[];for(let v=4.2;v<=26;v+=0.2)pts.push([v,n()*R_GAS*S.T/v]);lines.push({pts,color:'accent'});}
+  else{const slope=A.y==='V'?n()*R_GAS/(S.pLock||pTh()):n()*R_GAS/S.V;lines.push({pts:[[150,slope*150],[650,slope*650]],color:'accent'});lines.push({pts:[[0,0],[150,slope*150]],color:'accent',dash:[4,4]});texts.push({x:0,y:0,text:'0 K',dx:4,dy:-4});}
+  graph.draw({x:[0,xMax],y:[0,yMax],xl:A.xl,yl:A.yl,lines,texts,xTicks:A.x==='T'?[0,100,200,300,400,500,600]:[0,5,10,15,20,25],
+    dots:hist.map(p=>({x:p[0],y:p[1],a:0.45})).concat([{x:val(A.x),y:val(A.y),r:6,color:'hot',ring:true}])});}
+function text(){const p=pTh();
+  $('oV').textContent=fmt(S.V)+' L';$('oT').textContent=Math.round(S.T)+' K';$('oN').textContent=fmt(n(),2)+' mol';
+  $('rP').textContent=fmt(p);$('rV').textContent=fmt(S.V);$('rT').textContent=Math.round(S.T);$('rTc').textContent='K · '+Math.round(S.T-273)+' °C';
+  $('lhs').innerHTML=`<b>pV</b> = ${fmt(p)} kPa × ${fmt(S.V)} L = <b>${fmt(p*S.V,0)} J</b>`;
+  $('rhs').innerHTML=`<b>nRT</b> = ${fmt(n(),2)} × 8,31 × ${Math.round(S.T)} = <b>${fmt(n()*R_GAS*S.T,0)} J</b>`;
+  $('law').innerHTML={free:'Đổi bất kì đại lượng nào, hai vế vẫn bằng nhau.',T:`Boyle: <b>p·V = ${fmt(p*S.V,0)}</b> kPa·L, giữ nguyên khi bạn kéo V.`,p:`Charles: <b>V/T = ${fmt(S.V/S.T*1000,1)}</b> mL/K, giữ nguyên khi bạn kéo T.`,V:`Đẳng tích: <b>p/T = ${fmt(p/S.T,3)}</b> kPa/K, giữ nguyên khi bạn kéo T.`}[S.mode];
+  $('measured').textContent=`Đo từ va chạm phân tử: ≈ ${fmt(p*gas.ratio)} kPa (lí thuyết ${fmt(p)} kPa)`;}
+let tt=0;
+setMode('free');text();
+VL.loop(dt=>{
+  if(proving){proving.t+=dt;if(proving.t>1.2&&proving.p1===null)proving.p1=pTh();
+    if(proving.t>1.2){S.Vt=Math.max(10,20-(proving.t-1.2)*4);sV.value=S.Vt;}
+    if(S.V<=10.05&&proving.p1!==null){const fb=$('predictFb');fb.hidden=false;fb.textContent=`Kết quả đo: ở 20 L áp suất là ${fmt(proving.p1)} kPa, ở 10 L là ${fmt(pTh())} kPa. Tỉ số đúng bằng 2.`;proving=null;}}
+  const k=1-Math.exp(-dt*6);S.T+=(S.Tt-S.T)*k;const oldH=S.V/10;S.V+=(S.Vt-S.V)*k;const h=S.V/10;
+  for(let i=0;i<3;i++)gas.step(dt/3,h,0);
+  gas.thermostat(sig(S.T));gas.measure(h,sig(S.T));
+  st.begin(dt);gas.draw(st,h,H_MAX,{speedRef:sig(600)*Math.sqrt(3)*1.25});st.end();
+  histT+=dt;if(histT>0.12){histT=0;const A=axes();const pt=[val(A.x),val(A.y)];const l=hist[hist.length-1];if(!l||Math.abs(l[0]-pt[0])>0.15||Math.abs(l[1]-pt[1])>0.15){hist.push(pt);if(hist.length>220)hist.shift();}}
+  drawGraph();
+  tt+=dt;if(tt>0.1){tt=0;text();}
+});
+})();
+</script>

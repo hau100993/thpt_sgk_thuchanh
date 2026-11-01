@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nhiệt dung riêng và chuyển thể · Vật lí 12</title>
+<meta name="description" content="Sách Vật lí 12 tương tác: mô phỏng 3D, công thức sống, dự đoán và bài tập theo chương trình GDPT 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Vật lí nhiệt · Nhiệt dung riêng · Nhiệt nóng chảy riêng · Nhiệt hoá hơi riêng</div>
+      <h1>Đun một cốc nước đá</h1>
+      <p class="lede">Bắt đầu với nước đá ở −20 °C và một bếp điện. Theo dõi nhiệt độ theo thời gian cho đến khi nước hoá hơi hết, và xem mỗi đoạn tốn bao nhiêu năng lượng.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" id="phasePill">Đá</span><span class="num" id="clock">t = 0 s</span></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="sM">Khối lượng m <output id="oM"></output></label><input type="range" id="sM" min="0.2" max="2" step="0.05" value="0.5"></div>
+      <div class="ctl"><label for="sP">Công suất bếp P <output id="oP"></output></label><input type="range" id="sP" min="500" max="3000" step="50" value="2000"></div>
+      <div class="ctl"><label for="sS">Tua nhanh <output id="oS"></output></label><input type="range" id="sS" min="10" max="300" step="5" value="80"></div>
+      <div class="row"><button class="btn solid" type="button" id="runBtn">Bật bếp</button><button class="btn" type="button" id="resetBtn">Làm lại</button></div>
+      <div class="readout">
+        <div><small>Nhiệt độ</small><strong id="rT"></strong> <em>°C</em></div>
+        <div><small>Đá · Nước</small><strong id="rIce"></strong> <em>g</em></div>
+        <div><small>Đã nhận</small><strong id="rQ"></strong> <em>kJ</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq" id="eqNow"><i>Q</i> = <i>mc</i>Δ<i>t</i></div>
+        <div class="eqline" id="eqNum"></div>
+        <div class="law" id="eqWhy"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Nhiệt độ theo thời gian</h3><p>Hai đoạn nằm ngang là lúc chuyển thể: bếp vẫn cấp nhiệt nhưng nhiệt độ đứng yên.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+    <div class="scroll" style="margin-top:12px"><table class="data" id="tbl"></table></div>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Trong bốn giai đoạn (làm nóng đá, làm tan đá, làm nóng nước từ 0 °C đến 100 °C, hoá hơi nước), giai đoạn nào tốn nhiều năng lượng nhất?</p>
+      <div class="choices" data-correct="boil">
+        <button class="choice" type="button" data-k="ice">Làm nóng đá</button>
+        <button class="choice" type="button" data-k="melt">Làm tan đá</button>
+        <button class="choice" type="button" data-k="water">Làm nóng nước 0 → 100 °C</button>
+        <button class="choice" type="button" data-k="boil">Hoá hơi nước</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Hoá hơi cần 2,26 MJ cho mỗi kg, gấp hơn 5 lần lượng nhiệt để đun nóng nước từ 0 °C lên 100 °C. Bật bếp và xem đoạn nằm ngang thứ hai dài thế nào." data-wrong="Chưa đúng. Bật bếp và so sánh độ dài các đoạn trên đồ thị: bếp có công suất không đổi, nên đoạn càng dài thì càng tốn năng lượng."></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Đổi khối lượng: mọi đoạn đều dài ra theo tỉ lệ.</li>
+        <li>Đổi công suất bếp: đồ thị nhanh hơn, nhưng tổng năng lượng mỗi đoạn không đổi.</li>
+        <li>Chạy hết đến lúc nước hoá hơi xong để đóng dấu thí nghiệm.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Nhiệt dung riêng c</div><div class="eq"><i>Q</i> = <i>mc</i>Δ<i>t</i></div><p>Nhiệt lượng cần để 1 kg chất tăng thêm 1 K. Nước: 4 200 J/(kg·K), nước đá: 2 100 J/(kg·K), nhôm: 880 J/(kg·K).</p></div>
+        <div class="fact"><div class="eyebrow">Nhiệt nóng chảy riêng λ</div><div class="eq"><i>Q</i> = λ<i>m</i></div><p>Nhiệt lượng để 1 kg chất rắn nóng chảy hoàn toàn ở nhiệt độ nóng chảy. Nước đá: 3,34·10⁵ J/kg.</p></div>
+        <div class="fact"><div class="eyebrow">Nhiệt hoá hơi riêng L</div><div class="eq"><i>Q</i> = <i>Lm</i></div><p>Nhiệt lượng để 1 kg chất lỏng hoá hơi hoàn toàn ở nhiệt độ sôi. Nước: 2,26·10⁶ J/kg.</p></div>
+      </div>
+      <p>Bếp có công suất P không đổi nên nhiệt lượng nhận được tỉ lệ với thời gian: Q = P·t (bỏ qua hao phí). Vì vậy độ dài mỗi đoạn trên trục thời gian cho biết ngay đoạn đó tốn bao nhiêu nhiệt.</p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Tính nhiệt lượng cần để đun 2 kg nước từ 25 °C đến 100 °C.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>Q = mcΔt = 2 × 4200 × 75 = 630 000 J = 630 kJ</code>.</div></div>
+      <div class="flip"><p class="q">Cần bao nhiêu nhiệt để làm tan hoàn toàn 200 g nước đá ở 0 °C?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>Q = λm = 3,34·10⁵ × 0,2 = 66 800 J ≈ 66,8 kJ</code>.</div></div>
+      <div class="flip"><p class="q">Một ấm điện 1 500 W đun 1 kg nước đang sôi. Bỏ qua hao phí, sau bao lâu nước hoá hơi hết?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>t = Lm/P = 2,26·10⁶ × 1 / 1500 ≈ 1 507 s ≈ 25 phút</code>. Có thể kiểm tra bằng mô phỏng với m = 1 kg, P = 1 500 W.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Nêu định nghĩa nhiệt dung riêng, nhiệt nóng chảy riêng, nhiệt hoá hơi riêng.</li>
+          <li>Thiết kế phương án đo các đại lượng này (ví dụ dùng bếp điện có oát kế và đồng hồ).</li>
+        </ul>
+        <h4>Gợi ý thí nghiệm thật đi kèm</h4>
+        <ul>
+          <li>Dùng ấm siêu tốc có ghi công suất, cân nước, đo thời gian từ khi sôi đến khi nước còn lại một nửa để ước lượng L. Kết quả thường thấp hơn giá trị bảng vì có hao phí.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Không tính hao phí nhiệt ra môi trường, coi bếp truyền toàn bộ công suất cho nước. Nước đá ban đầu ở −20 °C, áp suất 1 atm.</li>
+          <li>Thời gian hiển thị là thời gian thực của thí nghiệm, được tua nhanh theo thanh "Tua nhanh".</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<script src="../assets/core.js"></script>
+<script>
+(function(){
+const {$,fmt}=VL;
+VL.chrome('03');
+const C_ICE=2100,C_W=4200,LAM=3.34e5,L_V=2.26e6,T0=-20;
+const S={m:0.5,P:2000,speed:80,E:0,t:0,run:false,hist:[[0,T0]],done:false};
+function stages(m){return [m*C_ICE*(0-T0),m*LAM,m*C_W*100,m*L_V];}
+function state(){const st=stages(S.m);let E=S.E;
+  if(E<st[0])return{ph:0,T:T0+E/(S.m*C_ICE),ice:S.m,water:0,steam:0,frac:E/st[0]};E-=st[0];
+  if(E<st[1]){const f=E/st[1];return{ph:1,T:0,ice:S.m*(1-f),water:S.m*f,steam:0,frac:f};}E-=st[1];
+  if(E<st[2])return{ph:2,T:E/(S.m*C_W),ice:0,water:S.m,steam:0,frac:E/st[2]};E-=st[2];
+  if(E<st[3]){const f=E/st[3];return{ph:3,T:100,ice:0,water:S.m*(1-f),steam:S.m*f,frac:f};}
+  return{ph:4,T:100,ice:0,water:0,steam:S.m,frac:1};}
+const PH=['Đá đang nóng lên','Đá đang tan','Nước đang nóng lên','Nước đang sôi','Đã hoá hơi hết'];
+const st3=VL.Ink3D($('stage'),{target:[0,1.2,0],dist:6.2,az:0.5,el:0.38});
+const graph=VL.Graph($('graph'));
+const sM=$('sM'),sP=$('sP'),sS=$('sS');
+function reset(){S.E=0;S.t=0;S.run=false;S.hist=[[0,T0]];S.done=false;bubbles.length=0;steam.length=0;$('runBtn').textContent='Bật bếp';}
+sM.addEventListener('input',()=>{S.m=+sM.value;reset();});
+sP.addEventListener('input',()=>{S.P=+sP.value;});
+sS.addEventListener('input',()=>{S.speed=+sS.value;});
+$('runBtn').addEventListener('click',()=>{if(S.done)reset();S.run=!S.run;$('runBtn').textContent=S.run?'Tắt bếp':'Bật bếp';});
+$('resetBtn').addEventListener('click',reset);
+// ice cube layout (fixed seeds)
+const cubes=[];for(let i=0;i<9;i++){const a=i*2.39996,r=0.25+0.42*Math.sqrt(i/9);cubes.push({x:Math.cos(a)*r,z:Math.sin(a)*r,y:0.22+(i%3)*0.18,rot:i*0.7});}
+const bubbles=[],steam=[];
+const BR=1.0,BH=2.4;
+function draw(dt,s){const T=VL.tok;st3.begin(dt);
+  // heater plate
+  st3.cylinder([0,-0.12,0],1.1,0.12,[0,1,0],S.run&&!S.done?VL.mix(T['ink-2'],T.hot,0.55):T['ink-2'],{seg:40});
+  // water body: height ∝ liquid mass (beaker holds up to 2 kg -> ~2 L)
+  const vol=s.water+s.ice*1.09;const level=0.06+vol/2.2*BH*0.85;
+  const wcol=VL.mix(T.cold,T.hot,Math.max(0,s.T)/100*0.3);
+  if(s.water>0.002){const wl=0.06+s.water/2.2*BH*0.85;
+    st3.cylinder([0,wl/2+0.01,0],BR*0.97,wl,[0,1,0],wcol,{seg:40,a:0.38});
+    st3.line(st3.ring([0,wl,0],BR*0.97,[0,1,0],48),wcol,2);}
+  // ice cubes: number shrinks with ice fraction
+  const nIce=Math.ceil(cubes.length*s.ice/S.m-1e-9);const sz=0.32*Math.cbrt(S.m/0.5);
+  for(let i=0;i<nIce;i++){const c=cubes[i];const fl=s.water>0.01?Math.min(c.y,(0.06+s.water/2.2*BH*0.85)-0.12):c.y;
+    const k=(i===nIce-1&&s.ph===1)?(1-((cubes.length*(1-s.ice/S.m))%1)):1;
+    st3.box([c.x,Math.max(0.2,fl),c.z],[sz*Math.max(0.35,k),sz*Math.max(0.35,k),sz*Math.max(0.35,k)],VL.mix(T.cold,T.card,0.55),{rot:p=>VL.V.rotY(p,c.rot),stroke:T.cold,w:1});}
+  // bubbles when boiling
+  if(s.ph===3&&S.run){for(let k=0;k<3;k++)bubbles.push({x:(Math.random()-.5)*1.5,z:(Math.random()-.5)*1.5,y:0.1,r:0.03+Math.random()*0.05});
+    if(Math.random()<0.6)steam.push({x:(Math.random()-.5)*1.2,z:(Math.random()-.5)*1.2,y:level,a:0.8});}
+  const wl=0.06+s.water/2.2*BH*0.85;
+  for(let i=bubbles.length-1;i>=0;i--){const b=bubbles[i];b.y+=dt*(1+b.r*10);if(b.y>wl||b.x*b.x+b.z*b.z>BR*BR*0.9){bubbles.splice(i,1);continue;}st3.sphere([b.x,b.y,b.z],b.r,T.card,{a:0.85});}
+  for(let i=steam.length-1;i>=0;i--){const p=steam[i];p.y+=dt*0.9;p.x*=1+dt*0.3;p.z*=1+dt*0.3;p.a-=dt*0.35;if(p.a<=0){steam.splice(i,1);continue;}st3.sphere([p.x,p.y,p.z],0.12,T['ink-2'],{a:p.a*0.35});}
+  // beaker glass
+  st3.line(st3.ring([0,0,0],BR,[0,1,0],48),T.ink,1.6);st3.line(st3.ring([0,BH,0],BR,[0,1,0],48),T.ink,1.4);
+  for(let k=0;k<12;k++){const a=k/12*Math.PI*2;st3.line([[Math.cos(a)*BR,0,Math.sin(a)*BR],[Math.cos(a)*BR,BH,Math.sin(a)*BR]],T.rule,0.8);}
+  // graduation marks
+  for(let v=0.5;v<=2;v+=0.5){const y=0.06+v/2.2*BH*0.85;st3.line([[BR*0.71,y,BR*0.71],[BR*0.6,y,BR*0.8]],T['ink-2'],1);st3.text([BR*0.85,y,BR*0.85],fmt(v,1)+' L',T['ink-2'],{align:'left',dx:4,font:'10px '+getComputedStyle(document.body).getPropertyValue('--f-mono')});}
+  // thermometer
+  const th=[0.55,0,-0.45];st3.line([[th[0],0.15,th[2]],[th[0],BH+0.6,th[2]]],T.rule,6,{zb:0.02});
+  const ty=0.15+(s.T+30)/140*(BH+0.3);st3.line([[th[0],0.15,th[2]],[th[0],ty,th[2]]],T.bad,3.5,{zb:-0.02});st3.sphere([th[0],0.15,th[2]],0.07,T.bad);
+  st3.end();}
+function table(s){const stg=stages(S.m);const names=['Làm nóng đá −20 → 0 °C','Đá tan ở 0 °C','Làm nóng nước 0 → 100 °C','Nước hoá hơi ở 100 °C'];
+  const fx=[`m·c<sub>đá</sub>·Δt = ${fmt(S.m,2)} × 2100 × 20`,`λ·m = 3,34·10⁵ × ${fmt(S.m,2)}`,`m·c<sub>nước</sub>·Δt = ${fmt(S.m,2)} × 4200 × 100`,`L·m = 2,26·10⁶ × ${fmt(S.m,2)}`];
+  const tot=stg.reduce((a,b)=>a+b,0);
+  $('tbl').innerHTML='<tr><th>Giai đoạn</th><th>Công thức</th><th style="text-align:right">Q (kJ)</th><th style="text-align:right">Tỉ lệ</th><th style="text-align:right">Thời gian (s)</th></tr>'+
+    stg.map((q,i)=>`<tr${s.ph===i?' style="background:var(--paper-2)"':''}><td>${names[i]}</td><td class="num" style="font-size:.8rem">${fx[i]}</td><td class="n">${fmt(q/1000,1)}</td><td class="n">${Math.round(q/tot*100)}%</td><td class="n">${fmt(q/S.P,0)}</td></tr>`).join('');}
+let lastPh=-1,tt=0;
+function ui(s){
+  $('oM').textContent=fmt(S.m,2)+' kg';$('oP').textContent=fmt(S.P,0)+' W';$('oS').textContent='×'+S.speed;
+  $('rT').textContent=fmt(s.T,1);$('rIce').textContent=Math.round(s.ice*1000)+' · '+Math.round(s.water*1000);$('rQ').textContent=fmt(S.E/1000,1);
+  $('phasePill').textContent=PH[s.ph];$('phasePill').style.color=s.ph<2?'var(--cold)':'var(--hot)';
+  const t=S.t;$('clock').textContent='t = '+(t<120?fmt(t,0)+' s':Math.floor(t/60)+' phút '+Math.round(t%60)+' s');
+  const stg=stages(S.m);let before=0;for(let i=0;i<Math.min(s.ph,4);i++)before+=stg[i];const q=S.E-before;
+  const eqs=[['<i>Q</i> = <i>mc</i><sub>đá</sub>Δ<i>t</i>',`${fmt(q/1000,1)} kJ = ${fmt(S.m,2)} × 2100 × ${fmt(s.T-T0,1)} / 1000`,'Đá ấm dần: các phân tử dao động mạnh hơn quanh vị trí cân bằng.'],
+    ['<i>Q</i> = λ<i>m</i>',`${fmt(q/1000,1)} kJ = 334 × ${fmt(S.m-s.ice,3)} kg đá đã tan`,'Nhiệt độ đứng ở 0 °C: năng lượng dùng để phá mạng tinh thể.'],
+    ['<i>Q</i> = <i>mc</i><sub>nước</sub>Δ<i>t</i>',`${fmt(q/1000,1)} kJ = ${fmt(S.m,2)} × 4200 × ${fmt(s.T,1)} / 1000`,'Nước có nhiệt dung riêng gấp đôi nước đá nên đoạn này dốc ít hơn.'],
+    ['<i>Q</i> = <i>Lm</i>',`${fmt(q/1000,1)} kJ = 2260 × ${fmt(s.steam,3)} kg nước đã hoá hơi`,'Nhiệt độ đứng ở 100 °C: năng lượng dùng để tách hẳn các phân tử ra.'],
+    ['<i>Q</i><sub>tổng</sub> = Σ<i>Q</i>',`${fmt(S.E/1000,1)} kJ`,'Nước đã hoá hơi hết. Bấm Làm lại để đun lượng khác.']][s.ph];
+  $('eqNow').innerHTML=eqs[0];$('eqNum').textContent=eqs[1];$('eqWhy').textContent=eqs[2];
+  if(s.ph!==lastPh){table(s);lastPh=s.ph;}}
+VL.loop(dt=>{
+  if(S.run&&!S.done){const dts=dt*S.speed;S.t+=dts;S.E+=S.P*dts;const tot=stages(S.m).reduce((a,b)=>a+b,0);if(S.E>=tot){S.E=tot;S.done=true;S.run=false;$('runBtn').textContent='Đun lại';VL.earn('lab');}
+    const s=state();const l=S.hist[S.hist.length-1];if(S.t-l[0]>2||Math.abs(s.T-l[1])>0.5)S.hist.push([S.t,s.T]);}
+  const s=state();draw(dt,s);
+  const tot=stages(S.m).reduce((a,b)=>a+b,0)/S.P;const xMax=Math.max(60,tot*1.05);
+  const stg=stages(S.m);let acc=0;const bands=stg.map((q,i)=>{const b={x0:acc/S.P,x1:(acc+q)/S.P,color:i%2?'hot':'cold',a:0.06,label:['đá ấm lên','nóng chảy','nước nóng lên','sôi'][i]};acc+=q;return b;});
+  const th=[];acc=0;let Tc=T0;th.push([0,T0]);stg.forEach((q,i)=>{acc+=q;th.push([acc/S.P,[0,0,100,100][i]]);});
+  graph.draw({x:[0,xMax],y:[-30,120],xl:'t (s)',yl:'nhiệt độ (°C)',bands,yTicks:[-20,0,20,40,60,80,100],
+    lines:[{pts:th,color:'rule',width:1.5,dash:[4,4]},{pts:S.hist.concat([[S.t,s.T]]),color:'hot',width:2.5}],dots:[{x:S.t,y:s.T,r:5,color:'hot',ring:true}]});
+  tt+=dt;if(tt>0.1){tt=0;ui(s);}
+});
+ui(state());
+})();
+</script>
+
+</body>
+</html>

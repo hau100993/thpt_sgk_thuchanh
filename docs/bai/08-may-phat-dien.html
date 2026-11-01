@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Máy phát điện xoay chiều · Vật lí 12</title>
+<meta name="description" content="Sách Vật lí 12 tương tác: mô phỏng 3D, công thức sống, dự đoán và bài tập theo chương trình GDPT 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Từ trường · Cảm ứng điện từ · Dòng điện xoay chiều</div>
+      <h1>Máy phát điện xoay chiều</h1>
+      <p class="lede">Quay một khung dây giữa hai cực nam châm. Từ thông qua khung tăng giảm đều đặn, nên suất điện động cảm ứng đổi chiều liên tục theo dạng hình sin. Đây là nguyên lí của mọi nhà máy điện.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" style="color:var(--violet)">B</span><span class="pill" style="color:var(--green)">pháp tuyến n</span><span class="num" id="angle"></span></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="sF">Tần số quay f <output id="oF"></output></label><input type="range" id="sF" min="0.1" max="2" step="0.05" value="0.4"></div>
+      <div class="ctl"><label for="sB">Cảm ứng từ B <output id="oB"></output></label><input type="range" id="sB" min="0.1" max="1" step="0.05" value="0.5"></div>
+      <div class="ctl"><label for="sN">Số vòng N <output id="oN"></output></label><input type="range" id="sN" min="10" max="500" step="10" value="100"></div>
+      <div class="ctl"><label for="sS">Diện tích khung S <output id="oS"></output></label><input type="range" id="sS" min="100" max="800" step="20" value="400"></div>
+      <div class="row"><button class="btn" type="button" id="pauseBtn">Dừng hình</button></div>
+      <div class="readout four">
+        <div><small>Suất điện động cực đại E₀</small><strong id="rE0"></strong> <em>V</em></div>
+        <div><small>Giá trị hiệu dụng E</small><strong id="rE"></strong> <em>V</em></div>
+        <div><small>Tức thời e</small><strong id="re"></strong> <em>V</em></div>
+        <div><small>Chu kì T</small><strong id="rT"></strong> <em>s</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq"><i>e</i> = <i>E</i>₀·sin(ω<i>t</i>)</div>
+        <div class="eqline" id="eqE"></div>
+        <div class="law">E₀ = N·B·S·ω với ω = 2πf. Giá trị hiệu dụng E = E₀/√2 là giá trị mà vôn kế xoay chiều chỉ.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graphs" style="margin-top:20px">
+    <div class="graph-card" style="margin-top:0"><div class="graph-head"><h3>Từ thông NΦ</h3></div><canvas class="graph" id="g1" style="height:200px"></canvas></div>
+    <div class="graph-card" style="margin-top:0"><div class="graph-head"><h3>Suất điện động e</h3></div><canvas class="graph" id="g2" style="height:200px"></canvas></div>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Tăng tốc độ quay của khung lên gấp đôi. Suất điện động cực đại E₀ thay đổi thế nào?</p>
+      <div class="choices" data-correct="x2">
+        <button class="choice" type="button" data-k="x1">Không đổi, chỉ tần số tăng</button>
+        <button class="choice" type="button" data-k="x2">Tăng gấp đôi, tần số cũng gấp đôi</button>
+        <button class="choice" type="button" data-k="x4">Tăng gấp bốn</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Quay nhanh gấp đôi thì từ thông biến thiên nhanh gấp đôi, nên cả biên độ lẫn tần số của e đều gấp đôi. Kéo thanh tần số từ 0,4 Hz lên 0,8 Hz để xem." data-wrong="Chưa đúng. Theo định luật Faraday, e tỉ lệ với tốc độ biến thiên từ thông. Kéo thanh tần số từ 0,4 Hz lên 0,8 Hz và so sánh đỉnh của đồ thị e."></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Bấm Dừng hình đúng lúc mặt khung vuông góc với đường sức (pháp tuyến song song B): từ thông lớn nhất nhưng e = 0.</li>
+        <li>Dừng lúc mặt khung song song với đường sức: từ thông bằng 0 nhưng e lớn nhất.</li>
+        <li>Đổi B, N hoặc S: E₀ tỉ lệ thuận với từng đại lượng.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Khung quay đều với tốc độ góc ω, góc giữa pháp tuyến và B là α = ωt. Từ thông qua N vòng: NΦ = NBS·cos(ωt). Suất điện động là tốc độ biến thiên từ thông đổi dấu:</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Suất điện động</div><div class="eq"><i>e</i> = <i>NBS</i>ω·sin(ω<i>t</i>)</div><p>Đạo hàm của cos là −sin, nên e lệch pha một phần tư chu kì so với từ thông: e cực đại khi Φ = 0.</p></div>
+        <div class="fact"><div class="eyebrow">Giá trị hiệu dụng</div><div class="eq"><i>E</i> = <i>E</i>₀/√2 · <i>I</i> = <i>I</i>₀/√2</div><p>Dòng xoay chiều có giá trị hiệu dụng I toả nhiệt trên điện trở bằng dòng một chiều cường độ I. Điện lưới 220 V là giá trị hiệu dụng, đỉnh khoảng 311 V.</p></div>
+        <div class="fact"><div class="eyebrow">Trong thực tế</div><div class="eq"><i>f</i> = 50 Hz</div><p>Lưới điện Việt Nam có tần số 50 Hz. Máy phát lớn thường giữ cuộn dây đứng yên và cho nam châm điện (rô-to) quay.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Khung dây 100 vòng, diện tích 400 cm², quay đều 50 vòng/giây trong từ trường đều 0,2 T vuông góc với trục quay. Tính E₀ và E.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>ω = 2π × 50 ≈ 314 rad/s; E₀ = NBSω = 100 × 0,2 × 0,04 × 314 ≈ 251 V; E = E₀/√2 ≈ 178 V</code>.</div></div>
+      <div class="flip"><p class="q">Điện áp hiệu dụng của lưới điện gia đình là 220 V. Điện áp cực đại là bao nhiêu?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>U₀ = U√2 = 220 × 1,414 ≈ 311 V</code>.</div></div>
+      <div class="flip"><p class="q">Viết biểu thức e(t) cho khung ở bài 1, chọn t = 0 lúc pháp tuyến cùng hướng với B.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Φ = NBS·cos(100πt) nên <code>e = 251·sin(100πt) (V)</code>.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Mô tả mô hình đơn giản của máy phát điện xoay chiều; giải thích nguyên tắc tạo ra suất điện động xoay chiều.</li>
+          <li>Nêu các đại lượng đặc trưng: giá trị cực đại, giá trị hiệu dụng, chu kì, tần số.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Đặt tần số thấp (0,2 Hz) và để học sinh đọc đồng thời góc quay và giá trị e. Chỉ vào thời điểm bóng đèn tối nhất.</li>
+          <li>Hỏi: vì sao bóng đèn nhấp nháy với tần số gấp đôi tần số quay? (công suất tỉ lệ e², đạt đỉnh hai lần mỗi vòng).</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Khung quay chậm để mắt theo kịp; E₀ hiển thị được tính theo đúng tần số trên thanh trượt. Bài tập dùng tần số thật 50 Hz.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<script src="../assets/core.js"></script>
+<script>
+(function(){
+const {$,fmt,V}=VL;
+VL.chrome('08');
+const S={f:0.4,B:0.5,N:100,S:400,phi:0,paused:false,clock:0,hist:[],dots:0};
+const st=VL.Ink3D($('stage'),{target:[0.3,-0.45,0],dist:11,az:0.55,el:0.3});
+const g1=VL.Graph($('g1')),g2=VL.Graph($('g2'));
+const tried=VL.Tried({max:'Φ cực đại, e = 0',zero:'Φ = 0, e cực đại',param:'đổi B, N hoặc S'},$('tried'));
+['F','B','N','S'].forEach(k=>$('s'+k).addEventListener('input',()=>{S[k==='F'?'f':k]=+$('s'+k).value;if(k!=='F')tried.add('param');}));
+$('pauseBtn').addEventListener('click',()=>{S.paused=!S.paused;$('pauseBtn').textContent=S.paused?'Chạy tiếp':'Dừng hình';
+  if(S.paused){const c=Math.abs(Math.cos(S.phi));if(c>0.95)tried.add('max');if(c<0.3)tried.add('zero');}});
+const E0=()=>S.N*S.B*S.S*1e-4*2*Math.PI*S.f;
+function draw(dt){const T=VL.tok;st.begin(dt);
+  const N=VL.mix(T.bad,T.card,0.1),Sc=VL.mix(T.cold,T.card,0.1);
+  st.box([-2.3,0,0],[0.8,2.4,1.8],N,{stroke:T.ink,w:1});st.box([2.3,0,0],[0.8,2.4,1.8],Sc,{stroke:T.ink,w:1});
+  const mono='700 15px '+getComputedStyle(document.body).getPropertyValue('--f-mono');
+  st.text([-2.3,0,0.95],'N',T.ink,{font:mono,front:true});st.text([2.3,0,0.95],'S',T.ink,{font:mono,front:true});
+  for(const y of [-0.8,0,0.8])for(const z of [-0.6,0.6]){st.line([[-1.9,y,z],[1.9,y,z]],T.violet,1,{a:0.35});st.arrow([1.2,y,z],[1.5,y,z],T.violet,1,{head:0.12,a:0.6});}
+  // loop, rotating about y
+  const a=Math.sqrt(S.S/400)*1.1,b=0.9;const n=[Math.cos(S.phi),0,Math.sin(S.phi)],t=[-Math.sin(S.phi),0,Math.cos(S.phi)];
+  const c=[V.add(V.mul(t,a),[0,b,0]),V.add(V.mul(t,-a),[0,b,0]),V.add(V.mul(t,-a),[0,-b,0]),V.add(V.mul(t,a),[0,-b,0])];
+  const copper=VL.mix(T.hot,T['ink-2'],0.25);const thick=1.5+Math.min(4,S.N/80);
+  st.line([c[0],c[1],c[2],c[3],[c[3][0]*0.15,-b,c[3][2]*0.15]],copper,thick);st.line([c[0],[c[0][0]*0.15,b,c[0][2]*0.15]],copper,thick);
+  st.poly(c,VL.alpha(T.hot,0.07));
+  // axle and slip rings
+  st.line([[0,-b,0],[0,-2.3,0]],T.ink,2.5);st.line([[0,b,0],[0,1.9,0]],T.ink,2.5);
+  st.line(st.ring([0,-1.55,0],0.28,[0,1,0],28),T['ink-2'],2.5);st.line(st.ring([0,-1.95,0],0.28,[0,1,0],28),T['ink-2'],2.5);
+  // brushes and leads to the bulb
+  const bulb=[2.6,-2.0,1.6];
+  st.line([[0.3,-1.55,0],[1.0,-1.55,0.4],[bulb[0],-1.55,bulb[2]],[bulb[0],bulb[1]+0.3,bulb[2]]],T['ink-2'],1.4);
+  st.line([[0.3,-1.95,0],[1.0,-2.4,0.4],[bulb[0],-2.4,bulb[2]],[bulb[0],bulb[1]-0.3,bulb[2]]],T['ink-2'],1.4);
+  const e=E0()*Math.sin(S.phi),k=Math.pow(Math.abs(Math.sin(S.phi)),2);
+  st.sphere(bulb,0.55,T.hot,{a:0.18*k});st.sphere(bulb,0.3,VL.mix(T.card,T.hot,0.15+0.85*k),{});
+  // normal vector
+  st.arrow([0,0,0],V.mul(n,1.5),T.green,2.6,{head:0.2,zb:-0.6});
+  // moving charges show current direction
+  if(!S.paused)S.dots+=dt*Math.sin(S.phi)*2;
+  const per=[c[0],c[1],c[2],c[3],c[0]];for(let i=0;i<14;i++){let u=((i/14+S.dots)%1+1)%1*4;const s=Math.floor(u),fr=u-s;st.sphere(V.add(V.mul(per[s],1-fr),V.mul(per[s+1],fr)),0.06,T.card,{a:Math.abs(Math.sin(S.phi))>0.05?0.95:0.3});}
+  st.end();}
+let tt=0;
+function ui(){const e0=E0(),e=e0*Math.sin(S.phi);
+  $('oF').textContent=fmt(S.f,2)+' Hz';$('oB').textContent=fmt(S.B,2)+' T';$('oN').textContent=S.N+' vòng';$('oS').textContent=S.S+' cm²';
+  $('rE0').textContent=fmt(e0,2);$('rE').textContent=fmt(e0/Math.SQRT2,2);$('re').textContent=fmt(e,2);$('rT').textContent=fmt(1/S.f,2);
+  const deg=((S.phi*180/Math.PI)%360+360)%360;$('angle').textContent='α = ωt = '+Math.round(deg)+'°';
+  $('eqE').innerHTML=`E₀ = ${S.N} × ${fmt(S.B,2)} × ${fmt(S.S*1e-4,3)} × 2π·${fmt(S.f,2)} = <b>${fmt(e0,2)} V</b>`;}
+VL.loop(dt=>{
+  if(!S.paused){S.phi+=2*Math.PI*S.f*dt;S.clock+=dt;const e0=E0();S.hist.push([S.clock,S.N*S.B*S.S*1e-4*Math.cos(S.phi)*1000,e0*Math.sin(S.phi)]);while(S.hist.length&&S.hist[0][0]<S.clock-6)S.hist.shift();}
+  draw(dt);
+  const pm=S.N*S.B*S.S*1e-4*1000*1.15||1,em=Math.max(0.1,E0()*1.15);
+  const x0=S.clock-6;
+  g1.draw({x:[x0,S.clock],y:[-pm,pm],xl:'t (s)',yl:'NΦ (mWb)',xFmt:v=>fmt(v,0),lines:[{pts:S.hist.map(h=>[h[0],h[1]]),color:'violet'}],dots:S.hist.length?[{x:S.clock,y:S.hist[S.hist.length-1][1],r:5,color:'violet',ring:true}]:[]});
+  g2.draw({x:[x0,S.clock],y:[-em,em],xl:'t (s)',yl:'e (V)',xFmt:v=>fmt(v,0),lines:[{pts:S.hist.map(h=>[h[0],h[2]]),color:'bad'}],dots:S.hist.length?[{x:S.clock,y:S.hist[S.hist.length-1][2],r:5,color:'bad',ring:true}]:[]});
+  tt+=dt;if(tt>0.1){tt=0;ui();}
+});
+ui();
+})();
+</script>
+
+</body>
+</html>

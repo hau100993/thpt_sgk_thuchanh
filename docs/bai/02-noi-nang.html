@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nội năng và định luật I · Vật lí 12</title>
+<meta name="description" content="Sách Vật lí 12 tương tác: mô phỏng 3D, công thức sống, dự đoán và bài tập theo chương trình GDPT 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Vật lí nhiệt · Nội năng · Định luật I nhiệt động lực học</div>
+      <h1>Hai cách làm khí nóng lên</h1>
+      <p class="lede">Đun nóng xi-lanh là truyền nhiệt. Ấn pít-tông xuống là thực hiện công. Cả hai đều làm nội năng của khí tăng, và sổ năng lượng bên phải luôn cân bằng.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" id="heatPill" hidden>đang đun</span></div>
+      <div class="legend"><span>chậm</span><span class="bar"></span><span>nhanh</span></div>
+    </div>
+    <div class="panel">
+      <div class="modes" role="group" aria-label="Pít-tông">
+        <button class="mode" type="button" data-mode="hold" aria-pressed="true"><b>Pít-tông giữ bằng tay</b><span>bạn chọn thể tích</span></button>
+        <button class="mode" type="button" data-mode="free"><b>Pít-tông tự do</b><span>áp suất không đổi</span></button>
+      </div>
+      <div class="ctl" id="ctlV"><label for="sV">Thể tích V <output id="oV"></output></label><input type="range" id="sV" min="5" max="25" step="0.1" value="15"></div>
+      <div class="row">
+        <button class="btn" type="button" id="heatBtn" aria-pressed="false">Đun nóng (+Q)</button>
+        <button class="btn" type="button" id="coolBtn" aria-pressed="false">Làm lạnh (−Q)</button>
+        <button class="btn" type="button" id="resetBtn">Đặt lại sổ</button>
+      </div>
+      <div class="readout">
+        <div><small>Áp suất</small><strong id="rP"></strong> <em>kPa</em></div>
+        <div><small>Thể tích</small><strong id="rV"></strong> <em>L</em></div>
+        <div><small>Nhiệt độ</small><strong id="rT"></strong> <em>K</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq">Δ<i>U</i> = <i>A</i> + <i>Q</i></div>
+        <div class="bars" id="ledger"></div>
+        <div class="eqline" id="check"></div>
+        <div class="law">Quy ước: Q &gt; 0 khi khí nhận nhiệt, A &gt; 0 khi khí nhận công (bị nén). Nội năng khí lí tưởng đơn nguyên tử: U = 3/2·nRT.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Đường đi trên đồ thị p – V</h3><p>Công khí nhận được bằng diện tích dưới đường đi khi thể tích giảm. Thử nén rồi đun, hoặc đun rồi nén: điểm cuối giống nhau nhưng Q và A chia phần khác nhau.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Xi-lanh không được đun, không trao đổi nhiệt với bên ngoài. Bạn ấn pít-tông thật nhanh, nén khí từ 20 L xuống 8 L. Nhiệt độ của khí sẽ thế nào?</p>
+      <div class="choices" data-correct="up">
+        <button class="choice" type="button" data-k="up">Tăng</button>
+        <button class="choice" type="button" data-k="same">Không đổi, vì không đun</button>
+        <button class="choice" type="button" data-k="down">Giảm</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Q = 0 nhưng A &gt; 0, nên ΔU = A &gt; 0. Pít-tông đi xuống làm các phân tử bật ra nhanh hơn, giống quả bóng đập vào vợt đang lao tới. Đây là lí do bơm xe đạp nóng lên." data-wrong="Chưa đúng. Không đun nghĩa là Q = 0, nhưng khí vẫn nhận công. Bấm thí nghiệm để xem nhiệt độ."></p>
+      <div><button class="btn solid" type="button" id="proveBtn">Nén nhanh 20 L → 8 L</button></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li><b>Chỉ truyền nhiệt:</b> giữ nguyên thể tích, bấm Đun nóng. A = 0, toàn bộ Q thành ΔU.</li>
+        <li><b>Chỉ thực hiện công:</b> không đun, kéo thanh thể tích. Q = 0, ΔU = A.</li>
+        <li><b>Cả hai:</b> chọn Pít-tông tự do rồi đun. Khí nở ra, sinh công (A &lt; 0), nên chỉ một phần Q làm tăng nội năng.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Nội năng là tổng động năng và thế năng của các phân tử cấu tạo nên vật. Với khí lí tưởng, lực tương tác bỏ qua nên chỉ còn động năng, và nội năng chỉ phụ thuộc nhiệt độ. Muốn đổi nội năng, chỉ có hai cách: truyền nhiệt hoặc thực hiện công. Định luật I là định luật bảo toàn năng lượng áp dụng cho hai cách đó.</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Đẳng tích</div><div class="eq">Δ<i>U</i> = <i>Q</i></div><p>Thể tích không đổi nên không có công. Mọi nhiệt nhận vào đều làm tăng nội năng.</p></div>
+        <div class="fact"><div class="eyebrow">Không trao đổi nhiệt</div><div class="eq">Δ<i>U</i> = <i>A</i></div><p>Nén nhanh làm khí nóng lên, cho khí giãn nhanh làm khí lạnh đi.</p></div>
+        <div class="fact"><div class="eyebrow">Công khi áp suất không đổi</div><div class="eq"><i>A</i> = −<i>p</i>Δ<i>V</i></div><p>Đơn vị: kPa × L = J. Khí giãn (ΔV &gt; 0) thì A âm, tức khí sinh công.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Người ta truyền cho khí trong xi-lanh nhiệt lượng 100 J. Khí nở ra, thực hiện công 70 J đẩy pít-tông. Nội năng khí thay đổi bao nhiêu?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Q = +100 J, khí sinh công nên A = −70 J. <code>ΔU = A + Q = −70 + 100 = 30 J</code>. Nội năng tăng 30 J.</div></div>
+      <div class="flip"><p class="q">Nén khí bằng công 50 J, đồng thời khí truyền ra ngoài nhiệt lượng 20 J. Tính ΔU.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>A = +50 J, Q = −20 J. <code>ΔU = 50 − 20 = 30 J</code>.</div></div>
+      <div class="flip"><p class="q">Khí giãn đẳng áp ở 100 kPa, thể tích tăng từ 10 L lên 14 L, nhận nhiệt 1 000 J. Tính công và độ biến thiên nội năng.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>A = −pΔV = −100 × 4 = −400 J</code> (kPa·L = J). <code>ΔU = −400 + 1000 = 600 J</code>.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Nêu được nội năng gồm động năng và thế năng của các phân tử.</li>
+          <li>Nêu được hai cách làm thay đổi nội năng; vận dụng định luật I: ΔU = A + Q.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Hỏi học sinh: xoa hai bàn tay vào nhau và hơ tay lên lửa giống và khác nhau thế nào?</li>
+          <li>Cho làm hai đường: đun rồi nén, và nén rồi đun, cùng về một trạng thái cuối. So sánh ΔU (giống nhau) với Q, A (khác nhau).</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>0,5 mol khí đơn nguyên tử, bếp cấp 150 J mỗi giây. Công tính bằng −p·dV ở từng bước nhỏ, nên đúng cả khi áp suất thay đổi.</li>
+          <li>Phân tử bật khỏi pít-tông đang chuyển động sẽ nhanh hơn hoặc chậm hơn, đó là cơ chế vi mô của công.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<script src="../assets/core.js"></script>
+<script>
+(function(){
+const {$,fmt}=VL;
+VL.chrome('02');
+const R=8.314,n=0.5,P_HEAT=150,H_MAX=2.6;
+const S={mode:'hold',T:300,V:15,Vt:15,heat:0,Q:0,A:0,U0:0,pLock:null};
+const U=()=>1.5*n*R*S.T, p=()=>n*R*S.T/S.V, sig=T=>0.9*Math.sqrt(T/300);
+S.U0=U();
+const gas=VL.GasSim({});gas.alloc(220,S.V/10,sig(S.T));
+const st=VL.Ink3D($('stage'),{target:[0,1.25,0],dist:6.8,az:0.5,el:0.3});
+const graph=VL.Graph($('graph'));
+const tried=VL.Tried({q:'chỉ truyền nhiệt',a:'chỉ thực hiện công',b:'cả hai'},$('tried'));
+const sV=$('sV');let path=[[S.V,p()]],proving=null,startV=S.V,startT=S.T,qSince=0,aSince=0;
+function setMode(m){S.mode=m;document.querySelectorAll('.mode').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+  sV.disabled=m==='free';S.pLock=m==='free'?p():null;S.Vt=S.V;}
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+sV.addEventListener('input',()=>{S.Vt=+sV.value;});
+function setHeat(h){S.heat=S.heat===h?0:h;$('heatBtn').setAttribute('aria-pressed',S.heat===1);$('coolBtn').setAttribute('aria-pressed',S.heat===-1);
+  $('heatBtn').classList.toggle('solid',S.heat===1);$('coolBtn').classList.toggle('solid',S.heat===-1);}
+$('heatBtn').addEventListener('click',()=>setHeat(1));$('coolBtn').addEventListener('click',()=>setHeat(-1));
+function resetLedger(){S.Q=0;S.A=0;S.U0=U();path=[[S.V,p()]];qSince=0;aSince=0;}
+$('resetBtn').addEventListener('click',resetLedger);
+$('proveBtn').addEventListener('click',()=>{setHeat(0);setMode('hold');S.T=300;S.V=S.Vt=20;sV.value=20;gas.alloc(220,2,sig(300));resetLedger();proving={t:0};
+  $('stage').scrollIntoView({behavior:VL.reduce?'auto':'smooth',block:'center'});});
+// ledger rows
+$('ledger').innerHTML=['Q','A','ΔU'].map((k,i)=>`<div class="barrow"><span>${k==='ΔU'?'ΔU':k}</span><div class="track"><div class="fill" id="bar${i}"></div><div style="position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--ink-2)"></div></div><span class="v" id="val${i}"></span></div>`).join('');
+function bar(i,v,col){const el=$('bar'+i),w=Math.min(50,Math.abs(v)/2500*50);el.style.background=col;el.style.width=w+'%';el.style.left=v>=0?'50%':(50-w)+'%';$('val'+i).textContent=(v>=0?'+':'−')+fmt(Math.abs(v),0)+' J';}
+function physics(dt){
+  const dQ=S.heat*P_HEAT*dt;let dA=0;const V0=S.V;
+  if(proving){proving.t+=dt;if(proving.t>0.8){S.Vt=Math.max(8,20-(proving.t-0.8)*9);sV.value=S.Vt;}if(S.Vt<=8&&Math.abs(S.V-8)<0.03){const fb=$('predictFb');fb.hidden=false;fb.textContent=`Kết quả: Q = 0, khí nhận công A = ${fmt(S.A,0)} J nên nhiệt độ tăng từ 300 K lên ${Math.round(S.T)} K.`;proving=null;}}
+  if(S.mode==='free'){ // isobaric: dQ = n Cp dT
+    S.T=VL.clamp(S.T+dQ/(2.5*n*R),80,900);S.V=n*R*S.T/S.pLock;if(S.V>25||S.V<5){S.V=VL.clamp(S.V,5,25);S.T=S.pLock*S.V/(n*R);}
+    sV.value=S.V;dA=-S.pLock*(S.V-V0);
+  } else {
+    const k=1-Math.exp(-dt*(proving?14:6));const Vn=S.V+(S.Vt-S.V)*k;dA=-p()*(Vn-S.V);S.V=Vn;
+    S.T=VL.clamp(S.T+(dQ+dA)/(1.5*n*R),60,1200);
+  }
+  S.Q+=dQ;S.A+=dA;const dec=Math.exp(-dt/4);qSince=qSince*dec+Math.abs(dQ);aSince=aSince*dec+Math.abs(dA);
+  if(S.heat!==0&&S.mode==='hold'&&Math.abs(S.V-S.Vt)<0.05&&qSince>150)tried.add('q');if(S.heat===0&&aSince>120)tried.add('a');if(S.mode==='free'&&S.heat!==0&&aSince>80)tried.add('b');
+  if(S.Q===0&&S.A===0){}
+  return (S.V-V0)/10/Math.max(dt,1e-4);
+}
+function draw(dt,pistonV){const T=VL.tok;st.begin(dt);const h=S.V/10;
+  gas.draw(st,h,H_MAX,{speedRef:sig(900)*Math.sqrt(3)*1.1});
+  // heater / cooler under the base
+  if(S.heat!==0){const col=S.heat>0?T.hot:T.cold;for(let r=0;r<3;r++)st.line(st.ring([0,-0.16-r*0.05,0],0.35+r*0.25,[0,1,0],40),col,2.4,{a:0.9-r*0.2});
+    if(S.heat>0)for(let k=0;k<8;k++){const a=k/8*Math.PI*2+performance.now()/900,r=0.55;const b=[Math.cos(a)*r,-0.45,Math.sin(a)*r];st.poly([V0(b,-0.08),V0(b,0.08),[b[0],-0.18-0.1*Math.random(),b[2]]],T.hot,{a:0.8});}}
+  st.end();}
+function V0(b,dx){return [b[0]+dx,b[1],b[2]];}
+let tt=0,pathT=0;
+function ui(){$('oV').textContent=fmt(S.V)+' L';$('rP').textContent=fmt(p());$('rV').textContent=fmt(S.V);$('rT').textContent=Math.round(S.T);
+  const dU=U()-S.U0;bar(0,S.Q,'var(--hot)');bar(1,S.A,'var(--violet)');bar(2,dU,'var(--accent)');
+  $('check').innerHTML=`A + Q = ${fmt(S.A,0)} + ${fmt(S.Q,0)} = <b>${fmt(S.A+S.Q,0)} J</b> · ΔU = 3/2·nR·ΔT = <b>${fmt(dU,0)} J</b>`;
+  $('heatPill').hidden=S.heat===0;$('heatPill').textContent=S.heat>0?'đang đun · +150 J/s':'đang làm lạnh · −150 J/s';$('heatPill').style.color=S.heat>0?'var(--hot)':'var(--cold)';}
+VL.loop(dt=>{
+  const pv=physics(dt);const h=S.V/10;
+  for(let i=0;i<3;i++)gas.step(dt/3,h,pv);
+  gas.thermostat(sig(S.T));
+  draw(dt,pv);
+  pathT+=dt;if(pathT>0.1){pathT=0;const l=path[path.length-1];if(Math.abs(l[0]-S.V)>0.05||Math.abs(l[1]-p())>0.5){path.push([S.V,p()]);if(path.length>500)path.shift();}}
+  const ymax=Math.max(200,...path.map(q=>q[1]))*1.1;
+  const area=path.length>1?[[path[0][0],0]].concat(path,[[path[path.length-1][0],0]]):[];
+  graph.draw({x:[0,26],y:[0,Math.ceil(ymax/50)*50],xl:'V (L)',yl:'p (kPa)',xTicks:[0,5,10,15,20,25],
+    lines:[{pts:area,color:'violet',width:1,a:0.5,dash:[3,3]},{pts:path,color:'ink',width:2}],
+    dots:[{x:path[0][0],y:path[0][1],r:4,color:'ink-2'},{x:S.V,y:p(),r:6,color:'hot',ring:true}]});
+  tt+=dt;if(tt>0.1){tt=0;ui();}
+});
+ui();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!-- title: Cấu trúc của chất · Vật lí 12 -->
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Vật lí nhiệt · Mô hình động học phân tử · Sự chuyển thể</div>
+      <h1>Rắn, lỏng, khí</h1>
+      <p class="lede">125 phân tử hút và đẩy nhau theo đúng định luật lực phân tử. Bạn chỉ điều khiển một thứ: nhiệt độ. Hãy xem chúng tự xếp thành mạng tinh thể, tự chảy thành giọt và tự bay hơi.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" id="phasePill">Rắn</span></div>
+      <div class="legend"><span>chậm</span><span class="bar"></span><span>nhanh</span></div>
+    </div>
+    <div class="panel">
+      <div class="modes three" role="group" aria-label="Chọn nhanh thể">
+        <button class="mode" type="button" data-t="0.3"><b>Rắn</b><span>lạnh</span></button>
+        <button class="mode" type="button" data-t="0.7"><b>Lỏng</b><span>ấm</span></button>
+        <button class="mode" type="button" data-t="2.2"><b>Khí</b><span>nóng</span></button>
+      </div>
+      <div class="ctl"><label for="sT">Nhiệt độ <output id="oT">0,30</output></label><input type="range" id="sT" min="0.15" max="2.5" step="0.01" value="0.3"></div>
+      <div class="row"><button class="btn" type="button" id="rampBtn">Đun nóng từ từ</button><button class="btn" type="button" id="coolBtn">Làm lạnh từ từ</button><label class="row note"><input type="checkbox" id="bondsChk" checked> Hiện liên kết</label></div>
+      <div class="formula">
+        <h3>Năng lượng trung bình của một phân tử</h3>
+        <div class="bars">
+          <div class="barrow"><span>Động năng</span><div class="track"><div class="fill" id="bK" style="background:var(--hot)"></div></div><span class="v" id="vK"></span></div>
+          <div class="barrow"><span>Thế năng</span><div class="track"><div class="fill neg" id="bU" style="background:var(--cold)"></div></div><span class="v" id="vU"></span></div>
+        </div>
+        <div class="law">Thế năng âm nghĩa là các phân tử đang "giữ" nhau. Muốn tách chúng ra, phải cung cấp năng lượng để đưa thế năng về gần 0.</div>
+        <div class="note" id="condNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Thế năng theo nhiệt độ</h3><p>Ở chỗ chuyển thể, thế năng nhảy vọt trong khi nhiệt độ gần như đứng yên. Đó là phần năng lượng dùng để phá liên kết, chính là nhiệt nóng chảy và nhiệt hoá hơi.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Khi nước đá đang tan ở 0 °C, ta vẫn đun nhưng nhiệt độ không tăng. Năng lượng nhận vào đã đi đâu?</p>
+      <div class="choices" data-correct="pot">
+        <button class="choice" type="button" data-k="fast">Làm phân tử chuyển động nhanh hơn</button>
+        <button class="choice" type="button" data-k="pot">Phá liên kết, làm tăng thế năng phân tử</button>
+        <button class="choice" type="button" data-k="big">Làm phân tử nở to ra</button>
+        <button class="choice" type="button" data-k="lost">Thoát hết ra môi trường</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Động năng (gắn với nhiệt độ) gần như không đổi, còn thế năng tăng vì các phân tử bị kéo xa nhau. Bấm &quot;Đun nóng từ từ&quot; và nhìn đồ thị để thấy bước nhảy." data-wrong="Chưa đúng. Hãy bấm &quot;Đun nóng từ từ&quot; và theo dõi hai thanh năng lượng: thanh nào thay đổi mạnh khi các phân tử rời mạng tinh thể?"></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li><b>Rắn:</b> phân tử dao động quanh vị trí cố định, xếp thành mạng đều đặn. Khối giữ được hình dạng.</li>
+        <li><b>Lỏng:</b> phân tử vẫn gần nhau nhưng trượt qua nhau. Khối mất hình dạng, chảy xuống đáy, nhưng thể tích gần như giữ nguyên.</li>
+        <li><b>Khí:</b> phân tử ở xa nhau, bay tự do và chiếm toàn bộ bình.</li>
+      </ul>
+      <p class="feedback">Đã quan sát: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Mô hình động học phân tử dựa trên ba ý: vật chất gồm các phân tử rất nhỏ; các phân tử chuyển động hỗn loạn không ngừng, nhiệt độ càng cao chuyển động càng nhanh; giữa các phân tử có lực hút và lực đẩy.</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Lực phân tử</div><div class="eq">ở gần: đẩy · ở xa: hút</div><p>Mô phỏng dùng thế Lennard-Jones: khi hai phân tử quá gần, lực đẩy rất mạnh; ở khoảng cách lớn hơn một chút, lực hút chiếm ưu thế; ở rất xa, lực gần như bằng 0.</p></div>
+        <div class="fact"><div class="eyebrow">Nóng chảy & đông đặc</div><div class="eq">rắn ⇄ lỏng</div><p>Chất rắn kết tinh nóng chảy ở một nhiệt độ xác định. Trong khi nóng chảy, nhiệt độ không đổi.</p></div>
+        <div class="fact"><div class="eyebrow">Hoá hơi & ngưng tụ</div><div class="eq">lỏng ⇄ khí</div><p>Bay hơi xảy ra ở mặt thoáng ở mọi nhiệt độ. Sôi là hoá hơi cả trong lòng chất lỏng, ở nhiệt độ xác định theo áp suất.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Vì sao chất khí dễ nén còn chất rắn và chất lỏng thì rất khó nén?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Trong chất khí, khoảng cách giữa các phân tử lớn hơn nhiều kích thước phân tử nên còn nhiều chỗ trống. Ở thể rắn và lỏng, phân tử đã sát nhau; ép thêm thì lực đẩy giữa chúng tăng rất mạnh.</div></div>
+      <div class="flip"><p class="q">Một giọt nước để ngoài trời ở 25 °C sau một lúc biến mất, dù nước chưa sôi. Giải thích bằng mô hình phân tử.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Tốc độ phân tử phân bố rộng. Ở mặt thoáng, luôn có một số phân tử đủ nhanh để thắng lực hút của các phân tử xung quanh và thoát ra ngoài. Đó là sự bay hơi. Trong mô phỏng, ở nhiệt độ thể lỏng vẫn có vài phân tử bay lên.</div></div>
+      <div class="flip"><p class="q">Khi đông đặc, nước toả nhiệt hay thu nhiệt? Thế năng phân tử tăng hay giảm?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Toả nhiệt. Các phân tử xích lại và liên kết chặt hơn nên thế năng giảm (âm hơn); phần chênh lệch được truyền ra môi trường.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Dùng mô hình động học phân tử, nêu sơ lược cấu trúc của chất rắn, lỏng, khí.</li>
+          <li>Giải thích sơ lược sự chuyển thể (nóng chảy, hoá hơi) bằng mô hình phân tử.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Bắt đầu ở thể rắn, bật "Hiện liên kết". Hỏi: nếu đun nóng, liên kết sẽ thế nào?</li>
+          <li>Bấm "Đun nóng từ từ", dừng lại ở vùng nóng chảy để lớp quan sát khối mất hình dạng.</li>
+          <li>Dùng đồ thị thế năng để nối sang bài nhiệt nóng chảy riêng và nhiệt hoá hơi riêng.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Đây là mô phỏng động lực học phân tử thật (thế Lennard-Jones, có trọng lực nhẹ để chất lỏng đọng ở đáy). Nhiệt độ hiển thị theo đơn vị của mô hình, không phải kelvin của một chất cụ thể.</li>
+          <li>Với 125 phân tử, ranh giới chuyển thể hơi "nhoè", đó là đặc điểm của hệ nhỏ.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<!--CORE-->
+<script>
+(function(){
+const {$,fmt}=VL;
+VL.chrome('01');
+// ---- Lennard-Jones MD (σ = ε = m = 1) ----
+const B=4.6,H=9.5,G=0.04,RC2=6.25,FLOOR=0.5;
+let px=[],py=[],pz=[];const nn=5,a=1.12;
+for(let i=0;i<nn;i++)for(let j=0;j<nn;j++)for(let k=0;k<nn;k++){px.push((i-2)*a);py.push(1.0+j*a);pz.push((k-2)*a);}
+const N=px.length;px=Float64Array.from(px);py=Float64Array.from(py);pz=Float64Array.from(pz);
+const vx=new Float64Array(N),vy=new Float64Array(N),vz=new Float64Array(N),fx=new Float64Array(N),fy=new Float64Array(N),fz=new Float64Array(N);
+let U=0,Tm=0.3,T0=0.3;
+function forces(){fx.fill(0);fy.fill(0);fz.fill(0);U=0;
+  for(let i=0;i<N;i++){fy[i]-=G;for(let j=i+1;j<N;j++){const dx=px[i]-px[j],dy=py[i]-py[j],dz=pz[i]-pz[j];const r2=dx*dx+dy*dy+dz*dz;if(r2>RC2)continue;
+    const ir2=1/Math.max(r2,0.64),ir6=ir2*ir2*ir2,f=24*ir2*ir6*(2*ir6-1);U+=4*ir6*(ir6-1);fx[i]+=f*dx;fy[i]+=f*dy;fz[i]+=f*dz;fx[j]-=f*dx;fy[j]-=f*dy;fz[j]-=f*dz;}}}
+function step(dt){
+  for(let i=0;i<N;i++){vx[i]+=0.5*dt*fx[i];vy[i]+=0.5*dt*fy[i];vz[i]+=0.5*dt*fz[i];px[i]+=dt*vx[i];py[i]+=dt*vy[i];pz[i]+=dt*vz[i];
+    if(px[i]<-B){px[i]=-2*B-px[i];vx[i]=Math.abs(vx[i]);}if(px[i]>B){px[i]=2*B-px[i];vx[i]=-Math.abs(vx[i]);}
+    if(pz[i]<-B){pz[i]=-2*B-pz[i];vz[i]=Math.abs(vz[i]);}if(pz[i]>B){pz[i]=2*B-pz[i];vz[i]=-Math.abs(vz[i]);}
+    if(py[i]<FLOOR){py[i]=2*FLOOR-py[i];vy[i]=Math.abs(vy[i]);}if(py[i]>H){py[i]=2*H-py[i];vy[i]=-Math.abs(vy[i]);}}
+  forces();let K=0;
+  for(let i=0;i<N;i++){vx[i]+=0.5*dt*fx[i];vy[i]+=0.5*dt*fy[i];vz[i]+=0.5*dt*fz[i];K+=vx[i]*vx[i]+vy[i]*vy[i]+vz[i]*vz[i];}
+  Tm=K/(3*N);const lam=Math.sqrt(Math.max(0.5,1+dt/0.35*(T0/Math.max(Tm,1e-6)-1)));for(let i=0;i<N;i++){vx[i]*=lam;vy[i]*=lam;vz[i]*=lam;}}
+// small random start velocities
+for(let i=0;i<N;i++){vx[i]=(Math.random()-.5)*.6;vy[i]=(Math.random()-.5)*.6;vz[i]=(Math.random()-.5)*.6;}
+forces();
+
+const st=VL.Ink3D($('stage'),{target:[0,3.6,0],dist:19,az:0.7,el:0.3});
+const graph=VL.Graph($('graph'));
+const tried=VL.Tried({s:'Rắn',l:'Lỏng',g:'Khí'},$('tried'));
+const sT=$('sT');let ramp=0,hist=[],histT=0,Uavg=U/N,Kavg=1.5*Tm,cond=1,phase='s';
+sT.addEventListener('input',()=>{T0=+sT.value;ramp=0;});
+document.querySelectorAll('.mode[data-t]').forEach(b=>b.addEventListener('click',()=>{T0=+b.dataset.t;sT.value=T0;ramp=0;}));
+$('rampBtn').addEventListener('click',()=>{ramp=ramp===1?0:1;if(ramp&&T0>2.3)T0=0.25;});
+$('coolBtn').addEventListener('click',()=>{ramp=ramp===-1?0:-1;});
+const nb=new Uint8Array(N);
+function neighbours(){nb.fill(0);const bonds=[];for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const dx=px[i]-px[j],dy=py[i]-py[j],dz=pz[i]-pz[j];const r2=dx*dx+dy*dy+dz*dz;if(r2<1.5*1.5){nb[i]++;nb[j]++;if(r2<1.35*1.35)bonds.push(i,j);}}
+  let c=0;for(let i=0;i<N;i++)if(nb[i]>=3)c++;cond=c/N;return bonds;}
+const PN={s:'Rắn',l:'Lỏng',g:'Khí'};
+function draw(dt){const T=VL.tok;st.begin(dt);
+  // container (open-top box)
+  const c=[[-B,FLOOR-.5,-B],[B,FLOOR-.5,-B],[B,FLOOR-.5,B],[-B,FLOOR-.5,B]],t=c.map(p=>[p[0],H,p[2]]);
+  st.poly(c,VL.alpha(T['ink-2'],0.12),{stroke:T.ink,w:1.4,zb:50});
+  for(let i=0;i<4;i++){st.line([c[i],t[i]],T.rule,1);st.line([t[i],t[(i+1)%4]],T.rule,1);}
+  const bonds=neighbours();
+  if($('bondsChk').checked)for(let k=0;k<bonds.length;k+=2){const i=bonds[k],j=bonds[k+1];st.line([[px[i],py[i],pz[i]],[px[j],py[j],pz[j]]],T['ink-2'],1.2,{a:0.45});}
+  const ref=Math.sqrt(3*2.2)*1.2;
+  for(let i=0;i<N;i++){const sp=Math.sqrt(vx[i]*vx[i]+vy[i]*vy[i]+vz[i]*vz[i]);st.sphere([px[i],py[i],pz[i]],0.4,VL.heat(sp/ref));}
+  st.end();}
+function ui(){
+  const T=Tm;phase=T<0.5?'s':(cond>0.6?'l':'g');tried.add(phase);
+  $('phasePill').textContent=PN[phase]+(phase==='l'&&cond<0.93?' · đang bay hơi':'');
+  $('phasePill').style.color=phase==='s'?'var(--cold)':phase==='l'?'var(--accent)':'var(--hot)';
+  $('oT').textContent=fmt(T0,2)+(ramp?(ramp>0?' ↑':' ↓'):'');
+  $('rampBtn').textContent=ramp===1?'Dừng đun':'Đun nóng từ từ';$('coolBtn').textContent=ramp===-1?'Dừng làm lạnh':'Làm lạnh từ từ';
+  $('bK').style.width=(Kavg/4*100)+'%';$('vK').textContent='+'+fmt(Kavg,2)+' ε';
+  $('bU').style.width=(Math.min(1,-Uavg/5.5)*100)+'%';$('bU').style.right='0';$('vU').textContent=fmt(Uavg,2)+' ε';
+  $('condNote').textContent=`${Math.round(cond*100)}% phân tử đang ở sát các phân tử khác (thể ngưng tụ).`;}
+let uiT=0;
+VL.loop(dt=>{
+  if(ramp){T0=VL.clamp(T0+ramp*dt*0.06,0.15,2.5);sT.value=T0;if(T0>=2.5||T0<=0.15)ramp=0;}
+  const steps=VL.reduce?5:9;for(let k=0;k<steps;k++)step(0.005);
+  Uavg+=(U/N-Uavg)*0.08;Kavg+=(1.5*Tm-Kavg)*0.08;
+  draw(dt);
+  histT+=dt;if(histT>0.2){histT=0;hist.push([Tm,Uavg]);if(hist.length>400)hist.shift();}
+  graph.draw({x:[0,2.6],y:[-6,0],xl:'nhiệt độ (đơn vị mô hình)',yl:'thế năng TB (ε)',
+    bands:[{x0:0,x1:0.5,color:'cold',label:'rắn',a:0.07},{x0:0.5,x1:1.1,color:'accent',label:'lỏng',a:0.05},{x0:1.1,x1:2.6,color:'hot',label:'khí',a:0.06}],
+    dots:hist.map((p,i)=>({x:p[0],y:p[1],a:0.25+0.5*i/hist.length,r:2.2})).concat([{x:Tm,y:Uavg,r:6,color:'hot',ring:true}])});
+  uiT+=dt;if(uiT>0.15){uiT=0;ui();}
+});
+})();
+</script>

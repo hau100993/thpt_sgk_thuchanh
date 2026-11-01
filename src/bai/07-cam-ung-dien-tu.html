@@ -1,0 +1,191 @@
+<!-- title: Cảm ứng điện từ · Vật lí 12 -->
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Từ trường · Từ thông · Định luật Faraday · Định luật Lenz</div>
+      <h1>Nam châm và cuộn dây</h1>
+      <p class="lede">Một cuộn dây nối với điện kế, không có pin. Đưa nam châm lại gần thì kim lệch, giữ yên thì kim về 0. Dòng điện chỉ xuất hiện khi từ thông qua cuộn dây đang thay đổi.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" style="color:var(--violet)">B nam châm</span><span class="pill" style="color:var(--green)">B cảm ứng</span></div>
+    </div>
+    <div class="panel">
+      <div class="modes three" role="group" aria-label="Cách di chuyển nam châm">
+        <button class="mode" type="button" data-mode="hand" aria-pressed="true"><b>Kéo tay</b><span>dùng thanh trượt</span></button>
+        <button class="mode" type="button" data-mode="osc"><b>Tự dao động</b><span>đi qua đi lại</span></button>
+        <button class="mode" type="button" data-mode="stop"><b>Đứng yên</b><span>giữ nguyên chỗ</span></button>
+      </div>
+      <div class="ctl" id="ctlX"><label for="sX">Vị trí nam châm <output id="oX"></output></label><input type="range" id="sX" min="-4.5" max="4.5" step="0.01" value="-3.5"></div>
+      <div class="ctl"><label for="sF">Tốc độ dao động <output id="oF"></output></label><input type="range" id="sF" min="0.1" max="1.2" step="0.05" value="0.4"></div>
+      <div class="ctl"><label for="sN">Số vòng dây N <output id="oN"></output></label><input type="range" id="sN" min="50" max="1000" step="50" value="300"></div>
+      <div class="row"><button class="btn" type="button" id="flipBtn">Lật nam châm</button></div>
+      <div class="readout two">
+        <div><small>Từ thông NΦ</small><strong id="rPhi"></strong> <em>mWb</em></div>
+        <div><small>Suất điện động e</small><strong id="rE"></strong> <em>mV</em></div>
+      </div>
+      <div class="formula">
+        <div class="eq"><i>e</i> = −<i>N</i>·ΔΦ/Δ<i>t</i></div>
+        <div class="eqline" id="eqE"></div>
+        <div class="law" id="lenz"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graphs" style="margin-top:20px">
+    <div class="graph-card" style="margin-top:0"><div class="graph-head"><h3>Từ thông qua cuộn dây</h3></div><canvas class="graph" id="g1" style="height:200px"></canvas></div>
+    <div class="graph-card" style="margin-top:0"><div class="graph-head"><h3>Suất điện động cảm ứng</h3></div><canvas class="graph" id="g2" style="height:200px"></canvas></div>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Đưa cực Bắc (N) của nam châm lại gần đầu cuộn dây. Dòng điện cảm ứng biến đầu cuộn dây đó thành cực gì?</p>
+      <div class="choices" data-correct="N">
+        <button class="choice" type="button" data-k="N">Cực Bắc, đẩy nam châm ra</button>
+        <button class="choice" type="button" data-k="S">Cực Nam, hút nam châm vào</button>
+        <button class="choice" type="button" data-k="none">Không thành cực nào</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Cuộn dây chống lại sự lại gần bằng cách đẩy ra. Nếu nó hút nam châm vào, nam châm sẽ tự tăng tốc và sinh ra năng lượng từ hư không. Đó là nội dung định luật Lenz." data-wrong="Chưa đúng. Kéo nam châm lại gần và xem chữ cái hiện ở đầu cuộn dây. Thử nghĩ: nếu cuộn dây hút nam châm vào, năng lượng sẽ lấy từ đâu?"></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Đưa nam châm lại gần, rồi kéo ra xa: kim điện kế lệch về hai phía ngược nhau.</li>
+        <li>Giữ nam châm đứng yên, kể cả khi nằm ngay trong cuộn dây: e = 0.</li>
+        <li>Tăng tốc độ dao động hoặc số vòng dây: đỉnh của e cao hơn.</li>
+        <li>Lật nam châm: mọi chiều đều đảo ngược.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Từ thông</div><div class="eq">Φ = <i>B</i>·<i>S</i>·cos α</div><p>Đo "lượng đường sức" xuyên qua một vòng dây diện tích S; α là góc giữa pháp tuyến của vòng dây và vectơ cảm ứng từ. Đơn vị weber (Wb).</p></div>
+        <div class="fact"><div class="eyebrow">Định luật Faraday</div><div class="eq">|<i>e</i>| = <i>N</i>·|ΔΦ/Δ<i>t</i>|</div><p>Độ lớn suất điện động cảm ứng bằng tốc độ biến thiên từ thông qua mạch. Cuộn N vòng cho N lần lớn hơn.</p></div>
+        <div class="fact"><div class="eyebrow">Định luật Lenz</div><div class="eq">dấu "−" trong công thức</div><p>Dòng điện cảm ứng có chiều sao cho từ trường do nó sinh ra chống lại sự biến thiên từ thông đã sinh ra nó. Đây là hệ quả của bảo toàn năng lượng.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Một vòng dây diện tích 50 cm² đặt trong từ trường đều 0,2 T, pháp tuyến hợp với đường sức góc 60°. Tính từ thông.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>Φ = BS·cos 60° = 0,2 × 50·10⁻⁴ × 0,5 = 5·10⁻⁴ Wb</code>.</div></div>
+      <div class="flip"><p class="q">Từ thông qua mỗi vòng của cuộn 200 vòng giảm đều từ 4 mWb về 0 trong 0,1 s. Tính độ lớn suất điện động cảm ứng.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>|e| = N·ΔΦ/Δt = 200 × 4·10⁻³ / 0,1 = 8 V</code>.</div></div>
+      <div class="flip"><p class="q">Kéo cực S của nam châm ra xa một vòng dây. Ở mặt vòng dây hướng về nam châm xuất hiện cực gì?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>Cực N. Nam châm đang rời đi nên vòng dây "giữ lại" bằng cách hút: mặt hướng về cực S của nam châm phải là cực N.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Định nghĩa từ thông; mô tả thí nghiệm về hiện tượng cảm ứng điện từ.</li>
+          <li>Vận dụng định luật Faraday và định luật Lenz.</li>
+        </ul>
+        <h4>Tiến trình gợi ý</h4>
+        <ul>
+          <li>Bắt đầu bằng chế độ Kéo tay. Kéo chậm, rồi kéo nhanh qua cùng một đoạn: ΔΦ như nhau nhưng e khác nhau.</li>
+          <li>Chuyển sang Tự dao động, chỉ vào hai đồ thị: e lớn nhất ở chỗ đồ thị Φ dốc nhất, và e = 0 ở đỉnh của Φ.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Từ thông qua mỗi vòng được mô hình hoá như trường trên trục của một lưỡng cực từ, đỉnh 3,5·10⁻⁴ Wb. Mỗi đơn vị trên thanh vị trí ứng với 5 cm.</li>
+          <li>Chữ N/S ở hai đầu cuộn dây cho biết cuộn dây đang đóng vai trò nam châm điện như thế nào.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<!--CORE-->
+<script>
+(function(){
+const {$,fmt,V}=VL;
+VL.chrome('07');
+const PHI0=3.5e-4,D=0.9,UNIT=0.05; // Wb per turn, falloff (units), metres per unit
+const S={mode:'hand',x:-3.5,xt:-3.5,f:0.4,N:300,p:1,t:0,e:0,phi:0,hist:[],clock:0};
+const fx=x=>1/Math.pow(1+(x/D)*(x/D),1.5);
+const st=VL.Ink3D($('stage'),{target:[0,0.5,0],dist:12.5,az:0.22,el:0.28});
+const g1=VL.Graph($('g1')),g2=VL.Graph($('g2'));
+const tried=VL.Tried({in:'đưa lại gần',out:'kéo ra xa',still:'đứng yên',flip:'lật nam châm'},$('tried'));
+function setMode(m){S.mode=m;document.querySelectorAll('.mode').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));$('sX').disabled=m!=='hand';if(m==='stop')tried.add('still');}
+document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.mode);if(b.dataset.mode==='osc')S.t=Math.asin(VL.clamp(S.x/4,-1,1))/(2*Math.PI*S.f);}));
+$('sX').addEventListener('input',()=>{S.xt=+$('sX').value;});
+$('sF').addEventListener('input',()=>{S.f=+$('sF').value;});
+$('sN').addEventListener('input',()=>{S.N=+$('sN').value;});
+$('flipBtn').addEventListener('click',()=>{S.p=-S.p;tried.add('flip');});
+function draw(dt){const T=VL.tok;st.begin(dt);
+  const R=0.8,L=1.6,turns=Math.round(6+S.N/1000*14);
+  // coil helix
+  const pts=[];const seg=turns*24;for(let i=0;i<=seg;i++){const t=i/seg,a=t*turns*Math.PI*2;pts.push([-L/2+L*t,Math.cos(a)*R,Math.sin(a)*R]);}
+  for(let i=0;i<seg;i+=6){const a=pts.slice(i,i+7);st.line(a,VL.mix(T.hot,T['ink-2'],0.35),2.2);}
+  // leads to galvanometer
+  st.line([[-L/2,R,0],[-L/2,2.1,0],[-0.5,2.1,0]],T['ink-2'],1.5);st.line([[L/2,R,0],[L/2,2.1,0],[0.5,2.1,0]],T['ink-2'],1.5);
+  // galvanometer box + needle
+  st.box([0,2.35,0],[1.1,0.7,0.25],T.card,{stroke:T.ink,w:1.2});
+  const fs=S.N*PHI0*0.86/D/UNIT*UNIT*3*1000; // mV full scale at ~3 units/s
+  const ang=VL.clamp(S.e*1000/fs,-1,1)*1.1;
+  st.line([[0,2.12,0.14],[Math.sin(ang)*0.42,2.12+Math.cos(ang)*0.42,0.14]],T.bad,2.2,{zb:-0.3});
+  st.line(st.ring([0,2.12,0.135],0.45,[0,0,1],24).filter(p=>p[1]>2.3),T['ink-2'],1,{zb:-0.2});
+  // induced poles
+  const mono='700 14px '+getComputedStyle(document.body).getPropertyValue('--f-mono');
+  if(Math.abs(S.e)>fs*0.002){const right=S.e>0?'N':'S',left=S.e>0?'S':'N';
+    st.text([L/2+0.3,-R-0.35,0],right,right==='N'?T.bad:T.cold,{font:mono});st.text([-L/2-0.3,-R-0.35,0],left,left==='N'?T.bad:T.cold,{font:mono});
+    st.arrow([-0.6*Math.sign(S.e),0,0],[0.6*Math.sign(S.e),0,0],T.green,3,{head:0.2,zb:-0.4});
+    // current direction arrows on the front turns
+    for(let k=0;k<3;k++){const x=-L/2+L*(k+0.5)/3,phi=Math.PI/2*0+0.2;const rr=[0,Math.cos(phi)*R,Math.sin(phi)*R];const tg=V.mul([0,-Math.sin(phi),Math.cos(phi)],Math.sign(S.e));
+      const p0=[x,rr[1],rr[2]+0.05];st.arrow(V.sub(p0,V.mul(tg,0.25)),V.add(p0,V.mul(tg,0.25)),T.bad,2.2,{head:0.14,zb:-0.5});}}
+  // magnet flux arrow inside coil
+  const ph=S.p*fx(S.x);if(Math.abs(ph)>0.02)st.arrow([-0.6*Math.sign(ph)*Math.abs(ph)-0.0,-0.3,0],[0.6*Math.sign(ph)*Math.abs(ph),-0.3,0],T.violet,2.5,{head:0.2});
+  // bar magnet: N half toward +x when p=+1
+  const mx=S.x,hl=0.9;const nCol=VL.mix(T.bad,T.card,0.1),sCol=VL.mix(T.cold,T.card,0.1);
+  st.box([mx+S.p*hl/2,0,0],[hl,0.42,0.42],nCol,{stroke:T.ink,w:1});st.box([mx-S.p*hl/2,0,0],[hl,0.42,0.42],sCol,{stroke:T.ink,w:1});
+  st.text([mx+S.p*hl/2,0.4,0],'N',T.ink,{font:mono,front:true});st.text([mx-S.p*hl/2,0.4,0],'S',T.ink,{font:mono,front:true});
+  // rail
+  st.line([[-4.8,-0.3,0],[4.8,-0.3,0]],T.rule,1,{dash:[4,4]});
+  st.end();}
+let tt=0,lastX=S.x;
+function ui(){const fs=S.N*PHI0*1000;
+  $('oX').textContent=fmt(S.x*5,0)+' cm';$('oF').textContent=fmt(S.f,2)+' Hz';$('oN').textContent=S.N+' vòng';
+  $('rPhi').textContent=fmt(S.N*S.phi*1000,2);$('rE').textContent=fmt(S.e*1000,1);
+  $('eqE').innerHTML=`= −${S.N} × ΔΦ/Δt = <b>${fmt(S.e*1000,1)} mV</b>`;
+  const v=(S.x-lastX);lastX=S.x;
+  let msg='Từ thông không đổi nên không có dòng điện cảm ứng.';
+  if(Math.abs(S.e)*1000>0.05){const growing=Math.sign(S.phi)*Math.sign(-S.e)>0;
+    msg=growing?'Từ thông qua cuộn dây đang <b>tăng</b> nên từ trường cảm ứng (xanh lá) <b>ngược chiều</b> từ trường nam châm (tím), chống lại sự tăng.':'Từ thông qua cuộn dây đang <b>giảm</b> nên từ trường cảm ứng (xanh lá) <b>cùng chiều</b> từ trường nam châm (tím), cố giữ lại từ thông.';
+    tried.add(growing?'in':'out');}
+  $('lenz').innerHTML=msg;}
+VL.loop(dt=>{
+  const x0=S.x;
+  if(S.mode==='hand'){S.x+=(S.xt-S.x)*Math.min(1,dt*8);}
+  else if(S.mode==='osc'){S.t+=dt;S.x=4*Math.sin(2*Math.PI*S.f*S.t);$('sX').value=S.x;S.xt=S.x;}
+  const phi=S.p*PHI0*fx(S.x);const e=dt>0?-S.N*(phi-S.phi)/dt:0;S.e+=(e-S.e)*Math.min(1,dt*20);S.phi=phi;
+  S.clock+=dt;S.hist.push([S.clock,S.N*phi*1000,S.e*1000]);while(S.hist.length&&S.hist[0][0]<S.clock-8)S.hist.shift();
+  if(S.mode==='hand'&&Math.abs(S.x-S.xt)<0.01&&Math.abs(S.e)<1e-6&&Math.abs(S.x)<0.5)tried.add('still');
+  draw(dt);
+  const x0g=S.clock-8;const pm=Math.max(0.05,S.N*PHI0*1000*1.1);const em=Math.max(5,...S.hist.map(h=>Math.abs(h[2])))*1.15;
+  g1.draw({x:[x0g,S.clock],y:[-pm,pm],xl:'t (s)',yl:'NΦ (mWb)',xFmt:v=>fmt(v,0),lines:[{pts:S.hist.map(h=>[h[0],h[1]]),color:'violet'}]});
+  g2.draw({x:[x0g,S.clock],y:[-em,em],xl:'t (s)',yl:'e (mV)',xFmt:v=>fmt(v,0),lines:[{pts:S.hist.map(h=>[h[0],h[2]]),color:'bad'}]});
+  tt+=dt;if(tt>0.1){tt=0;ui();}
+});
+setMode('hand');
+})();
+</script>

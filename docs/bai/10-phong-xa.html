@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Phóng xạ và chu kì bán rã · Vật lí 12</title>
+<meta name="description" content="Sách Vật lí 12 tương tác: mô phỏng 3D, công thức sống, dự đoán và bài tập theo chương trình GDPT 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="crumb" id="crumb"></nav>
+  <header class="top">
+    <div>
+      <div class="eyebrow">Vật lí hạt nhân · Hiện tượng phóng xạ · Định luật phóng xạ</div>
+      <h1>Chu kì bán rã</h1>
+      <p class="lede">Không ai đoán được một hạt nhân cụ thể sẽ phân rã lúc nào. Nhưng với hàng trăm hạt nhân, cứ sau một khoảng thời gian cố định lại có đúng khoảng một nửa số còn lại phân rã.</p>
+    </div>
+    <div class="top-actions" id="actions"></div>
+  </header>
+
+  <div class="lab">
+    <div class="stage" id="stage">
+      <span class="tag">Mô hình 3D · kéo để xoay</span>
+      <div class="overlay"><span class="pill" style="color:var(--hot)">chưa phân rã</span><span class="pill" style="color:var(--ink-2)">đã phân rã</span><span class="num" id="clock"></span></div>
+    </div>
+    <div class="panel">
+      <div class="ctl"><label for="isoSel">Chất phóng xạ</label><select id="isoSel"></select></div>
+      <div class="ctl"><label for="sN">Số hạt nhân ban đầu N₀ <output id="oN"></output></label><input type="range" id="sN" min="4" max="10" step="1" value="8"></div>
+      <div class="ctl"><label for="sV">Tốc độ <output id="oV"></output></label><input type="range" id="sV" min="0.05" max="1" step="0.05" value="0.25"></div>
+      <div class="row"><button class="btn solid" type="button" id="runBtn">Bắt đầu</button><button class="btn" type="button" id="oneBtn">Chạy đúng 1 chu kì</button><button class="btn" type="button" id="resetBtn">Làm lại</button></div>
+      <div class="readout">
+        <div><small>Còn lại N</small><strong id="rN"></strong></div>
+        <div><small>Lí thuyết</small><strong id="rTh"></strong></div>
+        <div><small>Tỉ lệ N/N₀</small><strong id="rR"></strong></div>
+      </div>
+      <div class="formula">
+        <div class="eq"><i>N</i> = <i>N</i>₀·2<sup>−<i>t</i>/<i>T</i></sup></div>
+        <div class="eqline" id="eqN"></div>
+        <div class="law" id="isoNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-card">
+    <div class="graph-head"><h3>Số hạt nhân còn lại theo thời gian</h3><p>Chấm: đếm trong mô phỏng. Đường: định luật phóng xạ. Mỗi vạch dọc là một chu kì bán rã.</p></div>
+    <canvas class="graph" id="graph"></canvas>
+  </div>
+
+  <section class="step">
+    <div class="step-label">Bước 1<b>Dự đoán</b></div>
+    <div class="step-body">
+      <p>Sau thời gian bằng 2 chu kì bán rã, số hạt nhân chưa phân rã còn lại bao nhiêu phần so với ban đầu?</p>
+      <div class="choices" data-correct="q">
+        <button class="choice" type="button" data-k="0">Không còn hạt nào</button>
+        <button class="choice" type="button" data-k="h">Một nửa</button>
+        <button class="choice" type="button" data-k="q">Một phần tư</button>
+        <button class="choice" type="button" data-k="e">Một phần tám</button>
+      </div>
+      <p class="feedback" id="predictFb" hidden data-right="Đúng. Sau chu kì thứ nhất còn 1/2, chu kì thứ hai lấy một nửa của phần còn lại, tức 1/4. Bấm &quot;Chạy đúng 1 chu kì&quot; hai lần để đếm." data-wrong="Chưa đúng. Mỗi chu kì chỉ làm số còn lại giảm một nửa, không phải mất thêm một nửa của ban đầu. Bấm &quot;Chạy đúng 1 chu kì&quot; hai lần để đếm."></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 2<b>Thử</b></div>
+    <div class="step-body">
+      <ul>
+        <li>Chạy đúng 1 chu kì, đếm số còn lại; chạy thêm 1 chu kì nữa.</li>
+        <li>Làm lại vài lần với N₀ nhỏ (64 hạt): kết quả dao động nhiều quanh lí thuyết. Với N₀ lớn (1 000 hạt), sát lí thuyết hơn hẳn.</li>
+        <li>Đổi chất phóng xạ: đồ thị theo đơn vị T giống hệt nhau, chỉ thời gian thật khác nhau.</li>
+      </ul>
+      <p class="feedback">Đã thử: <span id="tried">chưa có</span></p>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 3<b>Chứng minh</b></div>
+    <div class="step-body">
+      <p>Mỗi hạt nhân có cùng một xác suất phân rã trong mỗi giây, gọi là hằng số phóng xạ λ, không phụ thuộc vào việc nó đã tồn tại bao lâu. Số phân rã trong khoảng thời gian ngắn vì vậy tỉ lệ với số hạt còn lại, dẫn đến hàm mũ:</p>
+      <div class="facts">
+        <div class="fact"><div class="eyebrow">Định luật phóng xạ</div><div class="eq"><i>N</i> = <i>N</i>₀·<i>e</i><sup>−λ<i>t</i></sup></div><p>Viết theo chu kì bán rã: N = N₀·2<sup>−t/T</sup>. Khối lượng chất phóng xạ còn lại cũng giảm theo cùng quy luật.</p></div>
+        <div class="fact"><div class="eyebrow">Liên hệ λ và T</div><div class="eq">λ = ln 2 / <i>T</i></div><p>ln 2 ≈ 0,693. Chất có chu kì bán rã ngắn thì phân rã nhanh, độ phóng xạ ban đầu lớn.</p></div>
+        <div class="fact"><div class="eyebrow">Độ phóng xạ</div><div class="eq"><i>H</i> = λ<i>N</i></div><p>Số phân rã mỗi giây, đơn vị becơren (Bq). Độ phóng xạ cũng giảm một nửa sau mỗi chu kì bán rã.</p></div>
+        <div class="fact"><div class="eyebrow">Các loại tia</div><div class="eq">α · β⁻ · β⁺ · γ</div><p>Tia α là hạt nhân heli, đâm xuyên kém. Tia β là electron hoặc positron. Tia γ là sóng điện từ năng lượng rất cao, đâm xuyên mạnh nhất.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Bước 4<b>Bài tập</b></div>
+    <div class="step-body"><div class="cards">
+      <div class="flip"><p class="q">Iốt ¹³¹I có chu kì bán rã 8 ngày. Ban đầu có 100 g, sau 24 ngày còn lại bao nhiêu?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>24 ngày = 3 chu kì. <code>m = 100 × 2⁻³ = 12,5 g</code>.</div></div>
+      <div class="flip"><p class="q">Một mẫu gỗ cổ có lượng ¹⁴C chỉ còn 25% so với gỗ tươi. Cho T = 5 730 năm. Tuổi của mẫu gỗ?</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden>25% = 2⁻² nên t = 2T. <code>t = 2 × 5730 = 11 460 năm</code>.</div></div>
+      <div class="flip"><p class="q">Tính hằng số phóng xạ của ⁶⁰Co (T = 5,27 năm) theo đơn vị s⁻¹.</p><button class="btn small" type="button" data-ans>Lật đáp án</button><div class="a" hidden><code>T = 5,27 × 365 × 86400 ≈ 1,66·10⁸ s; λ = 0,693 / 1,66·10⁸ ≈ 4,17·10⁻⁹ s⁻¹</code>.</div></div>
+    </div></div>
+  </section>
+
+  <section class="step">
+    <div class="step-label">Giáo viên<b>Ghi chú</b></div>
+    <div class="step-body">
+      <details class="tnotes">
+        <summary>Gợi ý dùng trang này trên lớp</summary>
+        <h4>Yêu cầu cần đạt</h4>
+        <ul>
+          <li>Nêu bản chất tự phát và ngẫu nhiên của phóng xạ; các loại tia phóng xạ.</li>
+          <li>Định nghĩa độ phóng xạ, hằng số phóng xạ; vận dụng định luật phóng xạ và liên hệ λ = ln2/T.</li>
+        </ul>
+        <h4>Hoạt động gợi ý</h4>
+        <ul>
+          <li>Thí nghiệm "xúc xắc hạt nhân": mỗi học sinh tung một đồng xu, ai ra mặt sấp thì "phân rã" và ngồi xuống. Sau mỗi lượt, đếm số người còn đứng. So sánh với mô phỏng ở N₀ = 64.</li>
+          <li>Thảo luận ứng dụng: định tuổi bằng ¹⁴C, ¹³¹I trong y học, ⁶⁰Co trong xạ trị; an toàn phóng xạ.</li>
+        </ul>
+        <h4>Về mô phỏng</h4>
+        <ul>
+          <li>Mỗi hạt nhân được bốc thăm độc lập ở mỗi bước thời gian với xác suất phân rã đúng bằng λ·Δt, nên kết quả thật sự ngẫu nhiên và mỗi lần chạy mỗi khác.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <nav class="pager" id="pager"></nav>
+  <footer>Nội dung tự biên soạn theo yêu cầu cần đạt của chương trình Vật lí 12 (GDPT 2018), không trích từ sách giáo khoa.</footer>
+</div>
+<script src="../assets/core.js"></script>
+<script>
+(function(){
+const {$,fmt,V}=VL;
+VL.chrome('10');
+const ISO=[['²¹⁰Po','Poloni',138.4,'ngày','α','Phát tia α, biến thành chì ²⁰⁶Pb.'],['¹³¹I','Iốt',8.02,'ngày','β','Phát tia β⁻ và γ, dùng trong chẩn đoán và điều trị tuyến giáp.'],
+  ['⁶⁰Co','Coban',5.27,'năm','βγ','Phát tia β⁻ và γ mạnh, dùng trong xạ trị và chiếu xạ thực phẩm.'],['¹⁴C','Cacbon',5730,'năm','β','Phát tia β⁻, dùng để xác định tuổi các vật có nguồn gốc sinh vật.'],
+  ['²²⁶Ra','Rađi',1600,'năm','α','Phát tia α, được vợ chồng Curie phát hiện năm 1898.'],['²³⁸U','Urani',4.47e9,'năm','α','Phát tia α, chu kì bán rã cỡ tuổi Trái Đất.']];
+$('isoSel').innerHTML=ISO.map((s,i)=>`<option value="${i}">${s[0]} · ${s[1]} · T = ${VL.fmt(s[2],s[2]<10?2:(s[2]<1000?1:0)).replace(',00','')} ${s[3]}</option>`).join('');
+$('isoSel').value='1';
+let st;const S={iso:1,n:8,speed:0.25,t:0,run:false,stopAt:null,nuc:[],alive:0,N0:0,hist:[],parts:[],runs:0};
+const tried=VL.Tried({one:'chạy 1 chu kì',small:'N₀ nhỏ',big:'N₀ lớn',two:'chạy tới 2 chu kì'},$('tried'));
+function reset(){const n=S.n,sp=0.9;S.nuc=[];for(let i=0;i<n;i++)for(let j=0;j<n;j++)for(let k=0;k<n;k++)S.nuc.push({p:[(i-(n-1)/2)*sp,(j-(n-1)/2)*sp,(k-(n-1)/2)*sp],alive:true,flash:0});
+  S.N0=S.nuc.length;st.dist=7+n*1.9;S.alive=S.N0;S.t=0;S.hist=[[0,S.N0]];S.parts=[];S.run=false;S.stopAt=null;$('runBtn').textContent='Bắt đầu';
+  if(n<=4)tried.add('small');if(n>=10)tried.add('big');}
+$('isoSel').addEventListener('change',()=>{S.iso=+$('isoSel').value;reset();});
+$('sN').addEventListener('input',()=>{S.n=+$('sN').value;reset();});
+$('sV').addEventListener('input',()=>{S.speed=+$('sV').value;});
+$('runBtn').addEventListener('click',()=>{S.run=!S.run;S.stopAt=null;$('runBtn').textContent=S.run?'Tạm dừng':'Chạy tiếp';});
+$('oneBtn').addEventListener('click',()=>{S.stopAt=Math.floor(S.t+1e-6)+1;S.run=true;$('runBtn').textContent='Tạm dừng';tried.add('one');});
+$('resetBtn').addEventListener('click',reset);
+st=VL.Ink3D($('stage'),{target:[0,0,0],dist:22,az:0.6,el:0.42,rotateSpeed:0.08});
+const graph=VL.Graph($('graph'));
+function emit(p){const kind=ISO[S.iso][4];const dir=V.norm([Math.random()-.5,Math.random()-.5,Math.random()-.5]);
+  S.parts.push({p:p.slice(),v:V.mul(dir,kind==='α'?3:6),life:1,k:kind[0]});if(kind==='βγ')S.parts.push({p:p.slice(),v:V.mul(V.norm([Math.random()-.5,Math.random()-.5,Math.random()-.5]),9),life:1,k:'γ'});}
+function timeStr(tT){const [, ,T,u]=ISO[S.iso];const real=tT*T;let s;
+  if(u==='năm'&&real>=1e6)s=fmt(real/1e9,2)+' tỉ năm';else s=fmt(real,real<100?1:0)+' '+u;return fmt(tT,2)+' T = '+s;}
+function ui(){const th=S.N0*Math.pow(2,-S.t);
+  $('oN').textContent=S.N0+' hạt';$('oV').textContent=fmt(S.speed,2)+' T/giây';
+  $('rN').textContent=S.alive;$('rTh').textContent=fmt(th,0);$('rR').textContent=fmt(S.alive/S.N0*100,1)+'%';
+  $('clock').textContent='t = '+timeStr(S.t);
+  $('eqN').innerHTML=`= ${S.N0} × 2<sup>−${fmt(S.t,2)}</sup> = <b>${fmt(th,1)}</b> · đếm được <b>${S.alive}</b>`;
+  $('isoNote').textContent=ISO[S.iso][1]+' '+ISO[S.iso][0]+': '+ISO[S.iso][5];
+  if(S.t>=2)tried.add('two');}
+let tt=0;
+VL.loop(dt=>{
+  if(S.run){let d=dt*S.speed;if(S.stopAt!==null&&S.t+d>=S.stopAt){d=S.stopAt-S.t;S.run=false;S.stopAt=null;$('runBtn').textContent='Chạy tiếp';}
+    const p=1-Math.pow(2,-d);for(const n of S.nuc){if(n.alive&&Math.random()<p){n.alive=false;n.flash=1;S.alive--;emit(n.p);}}
+    S.t+=d;S.hist.push([S.t,S.alive]);if(S.t>6){S.run=false;$('runBtn').textContent='Chạy tiếp';}}
+  const T=VL.tok;st.begin(dt);
+  const half=(S.n-1)/2*0.9+0.5;
+  for(const n of S.nuc){if(n.alive)st.sphere(n.p,0.3,T.hot);else{n.flash=Math.max(0,n.flash-dt*2);st.sphere(n.p,0.2+0.15*n.flash,n.flash>0?T.card:VL.mix(T['ink-2'],T.card,0.45),{a:0.55+0.45*n.flash});}}
+  for(let i=S.parts.length-1;i>=0;i--){const q=S.parts[i];q.p=V.add(q.p,V.mul(q.v,dt));q.life-=dt*0.7;if(q.life<=0){S.parts.splice(i,1);continue;}
+    if(q.k==='γ')st.line([q.p,V.sub(q.p,V.mul(q.v,0.08))],T.green,2,{a:q.life});
+    else st.sphere(q.p,q.k==='α'?0.17:0.08,q.k==='α'?T.violet:T.accent,{a:q.life});}
+  st.line([[-half,-half,-half],[half,-half,-half],[half,-half,half],[-half,-half,half],[-half,-half,-half]],T.rule,1);
+  st.end();
+  const th=[];for(let x=0;x<=6;x+=0.05)th.push([x,S.N0*Math.pow(2,-x)]);
+  const lines=[{pts:th,color:'accent',width:2}];for(let k=1;k<=5;k++)lines.push({pts:[[k,0],[k,S.N0*Math.pow(2,-k)]],color:'rule',width:1,dash:[3,3]});
+  graph.draw({x:[0,6],y:[0,S.N0*1.05],xl:'t (đơn vị chu kì T)',yl:'N còn lại',xTicks:[0,1,2,3,4,5,6],xFmt:v=>v===0?'0':v+'T',lines,
+    dots:S.hist.filter((h,i)=>i%2===0).map(h=>({x:h[0],y:h[1],r:2,color:'hot',a:0.7})).concat([{x:S.t,y:S.alive,r:6,color:'hot',ring:true}]),
+    texts:[1,2,3].map(k=>({x:k,y:S.N0*Math.pow(2,-k),text:['N₀/2','N₀/4','N₀/8'][k-1],dx:6,dy:-4,color:'ink'}))});
+  tt+=dt;if(tt>0.1){tt=0;ui();}
+});
+reset();ui();
+})();
+</script>
+
+</body>
+</html>
